@@ -1,12 +1,12 @@
 /************************************************************************************/ /**
-* \file         Source/ARMCM4_STM32G4/GCC/cpu_comp.c
-* \brief        Bootloader cpu module source file.
-* \ingroup      Target_ARMCM4_STM32G4
+* \file         Source/asserts.c
+* \brief        Bootloader assertion module source file.
+* \ingroup      Core
 * \internal
 *----------------------------------------------------------------------------------------
 *                          C O P Y R I G H T
 *----------------------------------------------------------------------------------------
-*   Copyright (c) 2021  by Feaser    http://www.feaser.com    All rights reserved
+*   Copyright (c) 2011  by Feaser    http://www.feaser.com    All rights reserved
 *
 *----------------------------------------------------------------------------------------
 *                            L I C E N S E
@@ -31,22 +31,22 @@
 ****************************************************************************************/
 #include "boot.h" /* bootloader generic header          */
 
+#ifndef NDEBUG
 /************************************************************************************/ /**
-** \brief     Disable global interrupts.
-** \return    none.
+** \brief     Called when a runtime assertion failed. It stores information about where
+**            the assertion occurred and halts the software program.
+** \param     file   Name of the source file where the assertion occurred.
+** \param     line   Linenumber in the source file where the assertion occurred.
+** \return    none
 **
 ****************************************************************************************/
-void CpuIrqDisable(void) {
-    __asm volatile("cpsid i");
-} /*** end of CpuIrqDisable ***/
+void AssertFailure(blt_char *file, blt_int32u line) {
+    /* hang the software so that it requires a hard reset */
+    for (;;) {
+        /* keep servicing the watchdog so that this one does not cause a reset */
+        CopService();
+    }
+} /*** end of AssertFailure ***/
+#endif /* !NDEBUG */
 
-/************************************************************************************/ /**
-** \brief     Enable global interrupts.
-** \return    none.
-**
-****************************************************************************************/
-void CpuIrqEnable(void) {
-    __asm volatile("cpsie i");
-} /*** end of CpuIrqEnable ***/
-
-/*********************************** end of cpu_comp.c *********************************/
+/*********************************** end of assert.c ***********************************/

@@ -1,12 +1,12 @@
 /************************************************************************************/ /**
-* \file         Source/ARMCM4_STM32G4/GCC/cpu_comp.c
-* \brief        Bootloader cpu module source file.
-* \ingroup      Target_ARMCM4_STM32G4
+* \file         Source/cop.c
+* \brief        Bootloader watchdog module source file.
+* \ingroup      Core
 * \internal
 *----------------------------------------------------------------------------------------
 *                          C O P Y R I G H T
 *----------------------------------------------------------------------------------------
-*   Copyright (c) 2021  by Feaser    http://www.feaser.com    All rights reserved
+*   Copyright (c) 2011  by Feaser    http://www.feaser.com    All rights reserved
 *
 *----------------------------------------------------------------------------------------
 *                            L I C E N S E
@@ -31,22 +31,34 @@
 ****************************************************************************************/
 #include "boot.h" /* bootloader generic header          */
 
-/************************************************************************************/ /**
-** \brief     Disable global interrupts.
-** \return    none.
-**
+/****************************************************************************************
+* Hook functions
 ****************************************************************************************/
-void CpuIrqDisable(void) {
-    __asm volatile("cpsid i");
-} /*** end of CpuIrqDisable ***/
+#if (BOOT_COP_HOOKS_ENABLE > 0)
+extern void CopInitHook(void);
+extern void CopServiceHook(void);
+#endif
 
 /************************************************************************************/ /**
-** \brief     Enable global interrupts.
-** \return    none.
+** \brief     Watchdog initialization function.
+** \return    none
 **
 ****************************************************************************************/
-void CpuIrqEnable(void) {
-    __asm volatile("cpsie i");
-} /*** end of CpuIrqEnable ***/
+void CopInit(void) {
+#if (BOOT_COP_HOOKS_ENABLE > 0)
+    CopInitHook();
+#endif
+} /*** end of CopInit ***/
 
-/*********************************** end of cpu_comp.c *********************************/
+/************************************************************************************/ /**
+** \brief     Watchdog service function to prevent the watchdog from timing out.
+** \return    none
+**
+****************************************************************************************/
+void CopService(void) {
+#if (BOOT_COP_HOOKS_ENABLE > 0)
+    CopServiceHook();
+#endif
+} /*** end of CopService ***/
+
+/*********************************** end of cop.c **************************************/

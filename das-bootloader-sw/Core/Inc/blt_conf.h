@@ -22,7 +22,7 @@
 ****************************************************************************************/
 /* CAN communication (C0 has FDCAN). */
 #define BOOT_COM_CAN_ENABLE              (1)
-#define BOOT_COM_CAN_BAUDRATE            (500000)   /* pick what matches your bus */
+#define BOOT_COM_CAN_BAUDRATE            (1000000)   /* pick what matches your bus */
 #define BOOT_COM_CAN_TX_MSG_ID           (0x17u)
 #define BOOT_COM_CAN_TX_MAX_DATA         (8)
 #define BOOT_COM_CAN_RX_MSG_ID           (0x18u)
