@@ -14,7 +14,9 @@ The finite state machine has:
 ******************************************************************************/
 
 #include "fsm.h"
-
+#include "adc.h"
+#include "feedback-api.h"
+#include "eagletrt-api.h"
 // SEARCH FOR Your Code Here FOR CODE INSERTION POINTS!
 
 // GLOBALS
@@ -75,6 +77,7 @@ void fsm_event_trigger(fsm_event_data_t *event) {
 fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_STATE_IDLE;
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 
     switch (next_state) {
         case FSM_STATE_IDLE:
@@ -92,6 +95,7 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
 fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 
     switch (next_state) {
         case FSM_NO_CHANGE:
@@ -111,6 +115,7 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
 fsm_state_t fsm_do_error(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 
     switch (next_state) {
         case FSM_NO_CHANGE:
@@ -128,6 +133,7 @@ fsm_state_t fsm_do_error(fsm_state_data_t *data) {
 fsm_state_t fsm_do_flash(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 
     switch (next_state) {
         case FSM_NO_CHANGE:
@@ -159,18 +165,23 @@ fsm_state_t fsm_do_flash(fsm_state_data_t *data) {
 // 1. from init to idle
 void fsm_init_done(fsm_state_data_t *data) {
     /* Your Code Here */
+    feedback_api_init();
+    adc_start_dma_feedback();
+    EAGLETRT_API_UNUSED(data);
 }
 
 // This function is called in 1 transition:
 // 1. from init to error
 void fsm_init_error(fsm_state_data_t *data) {
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 }
 
 // This function is called in 1 transition:
 // 1. from idle to flash
 void fsm_start_flash(fsm_state_data_t *data) {
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 }
 
 // This function is called in 2 transitions:
@@ -178,12 +189,14 @@ void fsm_start_flash(fsm_state_data_t *data) {
 // 2. from flash to error
 void fsm_error_detected(fsm_state_data_t *data) {
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 }
 
 // This function is called in 1 transition:
 // 1. from flash to idle
 void fsm_flash_done(fsm_state_data_t *data) {
     /* Your Code Here */
+    EAGLETRT_API_UNUSED(data);
 }
 
 /*  ____  _        _        

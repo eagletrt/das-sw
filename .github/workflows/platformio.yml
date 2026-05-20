@@ -30,7 +30,9 @@ jobs:
         run: pip install --upgrade platformio
 
       - name: Build
-        run: pio run
+        run: |
+          pio run -e front
+          pio run -e rear
 
       - name: Static Code Analysis
         if: github.ref == 'refs/heads/dev'
