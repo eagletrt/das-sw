@@ -483,9 +483,6 @@ EAGLETRT_STATIC void adc_feedbacks_read(void) {
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     if (hadc->Instance == ADC1) { // SHUTDOWN
         adc_feedbacks_read();
-        if (adc_start_dma_feedback() != FEEDBACK_RC_OK) {
-            // print ?
-        }
     }
 }
 
