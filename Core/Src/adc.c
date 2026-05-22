@@ -461,7 +461,7 @@ enum FeedbackReturnCode adc_stop_dma_feedback(void) {
     return HAL_ADC_Stop_DMA(&hadc1) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
-EAGLETRT_STATIC void feedback_handler(void) {
+EAGLETRT_STATIC void adc_feedbacks_read(void) {
     enum FeedbackName feedback;
     enum FeedbackState state;
     for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
@@ -473,14 +473,16 @@ EAGLETRT_STATIC void feedback_handler(void) {
         } else {
             state = FEEDBACK_STATE_IMPLAUSIBILITY;
         }
-        feedback_api_set_state(feedback, state);
+        if (feedback_api_set_state(feedback, state) == FEEDBACK_RC_ERROR) {
+            // print ?
+        }
     }
 }
 
 // eventually we can set only a flag that indicate which handler we have to call and then start DMA
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     if (hadc->Instance == ADC1) { // SHUTDOWN
-        feedback_handler();
+        adc_feedbacks_read();
         if (adc_start_dma_feedback() != FEEDBACK_RC_OK) {
             // print ?
         }
