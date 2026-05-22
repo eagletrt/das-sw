@@ -453,12 +453,12 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle) {
 /* USER CODE BEGIN 1 */
 
 // called outside adc.c
-HAL_StatusTypeDef adc_start_dma_feedback(void) {
-    return HAL_ADC_Start_DMA(&hadc1, (uint32_t *)feedback_value, FEEDBACK_NAME_COUNT);
+enum FeedbackReturnCode adc_start_dma_feedback(void) {
+    return HAL_ADC_Start_DMA(&hadc1, (uint32_t *)feedback_value, FEEDBACK_NAME_COUNT) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
-HAL_StatusTypeDef adc_stop_dma_feedback(void) {
-    return HAL_ADC_Stop_DMA(&hadc1);
+enum FeedbackReturnCode adc_stop_dma_feedback(void) {
+    return HAL_ADC_Stop_DMA(&hadc1) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
 EAGLETRT_STATIC void feedback_handler(void) {
@@ -481,7 +481,7 @@ EAGLETRT_STATIC void feedback_handler(void) {
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     if (hadc->Instance == ADC1) { // SHUTDOWN
         feedback_handler();
-        if (adc_start_dma_feedback() != HAL_OK) {
+        if (adc_start_dma_feedback() != FEEDBACK_RC_OK) {
             // print ?
         }
     }

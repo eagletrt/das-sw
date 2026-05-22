@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "feedback.h"
 /* USER CODE END Includes */
 
 extern ADC_HandleTypeDef hadc1;
@@ -47,8 +47,8 @@ void MX_ADC2_Init(void);
 void MX_ADC3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-HAL_StatusTypeDef adc_start_dma_feedback(void);
-HAL_StatusTypeDef adc_stop_dma_feedback(void);
+enum FeedbackReturnCode adc_start_dma_feedback(void);
+enum FeedbackReturnCode adc_stop_dma_feedback(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
