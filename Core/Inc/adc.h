@@ -47,8 +47,23 @@ void MX_ADC2_Init(void);
 void MX_ADC3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+
+/*!
+ * \brief Start DMA for feedback lines
+ * 
+ * \retval FEEDBACK_RC_OK if DMA started successfully
+ * \retval FEEDBACK_RC_ERROR if HAL API doesn't work
+ */
 enum FeedbackReturnCode adc_start_dma_feedback(void);
+
+/*!
+ * \brief Stop DMA for feedback lines
+ * 
+ * \retval FEEDBACK_RC_OK if DMA stopped successfully
+ * \retval FEEDBACK_RC_ERROR if HAL API doesn't work
+ */
 enum FeedbackReturnCode adc_stop_dma_feedback(void);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -2,6 +2,7 @@
 #define FEEDBACK_H
 
 #include "eagletrt.h"
+#include <stdint.h>
 
 #if defined(DAS_FRONT) && defined(DAS_REAR)
 #error "Only one between DAS_FRONT and DAS_REAR can be defined"
@@ -12,7 +13,7 @@
 /*!
  * \brief Names for checked shutdowns of DAS FRONT
  */
-enum FeedbackName {
+enum FeedbackName : uint8_t {
     FEEDBACK_NAME_PILOT,    /*!< Shutdown button for the pilot */
     FEEDBACK_NAME_SX,       /*!< Mainhoop SX shutdown */
     FEEDBACK_NAME_DX,       /*!< Mainhoop DX shutdown */
@@ -25,7 +26,7 @@ enum FeedbackName {
 /*!
  * \brief Names for checked shutdowns of DAS REAR
  */
-enum FeedbackName {
+enum FeedbackName : uint8_t {
     FEEDBACK_NAME_INTERLOCK, /*!< Interlock feedback */
     FEEDBACK_NAME_ARMS_LINE, /*!< Arms line feedback signal */
     FEEDBACK_NAME_COUNT      /*!< Total number of feedback lines */
@@ -41,7 +42,7 @@ enum FeedbackName {
 /*!
  * \brief Possible return codes for feedback initialization function
  */
-enum FeedbackReturnCode {
+enum FeedbackReturnCode : uint8_t {
     FEEDBACK_RC_OK,   /*!< Initialization successful */
     FEEDBACK_RC_ERROR /*!< Error during initialization */
 };
@@ -49,7 +50,7 @@ enum FeedbackReturnCode {
 /*!
  * \brief Possible return codes for feedback status functions
  */
-enum FeedbackState {
+enum FeedbackState : uint8_t {
     FEEDBACK_STATE_LOW,            /*!< Feedback line is low */
     FEEDBACK_STATE_IMPLAUSIBILITY, /*!< Feedback line is on a borderline state */
     FEEDBACK_STATE_HIGH,           /*!< Feedback line is high */
