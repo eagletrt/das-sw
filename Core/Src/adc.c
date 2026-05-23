@@ -22,12 +22,14 @@
 
 /* USER CODE BEGIN 0 */
 #include "feedback-api.h"
+#include "potentiometer-api.h"
 #include "eagletrt-api.h"
 
 // const pointers to hadc
 EAGLETRT_STATIC ADC_HandleTypeDef *const hadc_feedback = &hadc1;
 
 EAGLETRT_STATIC uint16_t feedback_value[FEEDBACK_NAME_COUNT];
+EAGLETRT_STATIC uint16_t potentiometer_value[POTENTIOMETER_NAME_COUNT];
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
@@ -480,10 +482,24 @@ EAGLETRT_STATIC void adc_feedbacks_read(void) {
     }
 }
 
+EAGLETRT_STATIC void adc_potentiometer_read(void) {
+    enum PotentiometerName potentiometer;
+    uint16_t value;
+    for (int i = 0; i < POTENTIOMETER_NAME_COUNT; i++) {
+        potentiometer = i;
+        value = potentiometer_value[i];
+        if (potentiometer_api_set_state(potentiometer, value) == POTENTIOMETER_RC_ERROR) {
+            // print ?
+        }
+    }
+}
+
 // eventually we can set only a flag that indicate which handler we have to call and then start DMA
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     if (hadc == hadc_feedback) {
         adc_feedbacks_read();
+    } else if (hadc->Instance == ADC2) { // POTENTIOMETER
+        adc_potentiometer_read();
     }
 }
 
