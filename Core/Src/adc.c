@@ -462,13 +462,11 @@ enum FeedbackReturnCode adc_stop_dma_feedback(void) {
 }
 
 EAGLETRT_STATIC void adc_feedbacks_read(void) {
-    enum FeedbackName feedback;
-    enum FeedbackState state;
-    for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
-        feedback = i;
-        if (feedback_value[i] < FEEDBACK_THRESHOLD_LOW) {
+    enum FeedbackState state = FEEDBACK_STATE_ERROR;
+    for (enum FeedbackName feedback = 0; feedback < FEEDBACK_NAME_COUNT; ++feedback) {
+        if (feedback_value[feedback] < FEEDBACK_THRESHOLD_LOW) {
             state = FEEDBACK_STATE_LOW;
-        } else if (feedback_value[i] > FEEDBACK_THRESHOLD_HIGH) {
+        } else if (feedback_value[feedback] > FEEDBACK_THRESHOLD_HIGH) {
             state = FEEDBACK_STATE_HIGH;
         } else {
             state = FEEDBACK_STATE_IMPLAUSIBILITY;
