@@ -24,6 +24,9 @@
 #include "feedback-api.h"
 #include "eagletrt-api.h"
 
+// const pointers to hadc
+static ADC_HandleTypeDef *const hadc_feedback = &hadc1;
+
 EAGLETRT_STATIC uint16_t feedback_value[FEEDBACK_NAME_COUNT];
 /* USER CODE END 0 */
 
@@ -454,19 +457,19 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle) {
 
 // called outside adc.c
 enum FeedbackReturnCode adc_start_dma_feedback(void) {
-    return HAL_ADC_Start_DMA(&hadc1, (uint32_t *)feedback_value, FEEDBACK_NAME_COUNT) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
+    return HAL_ADC_Start_DMA(hadc_feedback, (uint32_t *)feedback_value, FEEDBACK_NAME_COUNT) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
 enum FeedbackReturnCode adc_stop_dma_feedback(void) {
-    return HAL_ADC_Stop_DMA(&hadc1) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
+    return HAL_ADC_Stop_DMA(hadc_feedback) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
 EAGLETRT_STATIC void adc_feedbacks_read(void) {
     enum FeedbackState state = FEEDBACK_STATE_ERROR;
     for (enum FeedbackName feedback = 0; feedback < FEEDBACK_NAME_COUNT; ++feedback) {
-        if (feedback_value[feedback] < FEEDBACK_THRESHOLD_LOW) {
+        if (feedback_value[feedback] < FEEDBACK_THRESHOLD_LOW_MV) {
             state = FEEDBACK_STATE_LOW;
-        } else if (feedback_value[feedback] > FEEDBACK_THRESHOLD_HIGH) {
+        } else if (feedback_value[feedback] > FEEDBACK_THRESHOLD_HIGH_MV) {
             state = FEEDBACK_STATE_HIGH;
         } else {
             state = FEEDBACK_STATE_IMPLAUSIBILITY;
@@ -479,7 +482,7 @@ EAGLETRT_STATIC void adc_feedbacks_read(void) {
 
 // eventually we can set only a flag that indicate which handler we have to call and then start DMA
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
-    if (hadc->Instance == ADC1) { // SHUTDOWN
+    if (hadc == hadc_feedback) {
         adc_feedbacks_read();
     }
 }

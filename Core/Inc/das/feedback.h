@@ -14,11 +14,11 @@
  * \brief Names for checked shutdowns of DAS FRONT
  */
 enum FeedbackName : uint8_t {
-    FEEDBACK_NAME_PILOT,    /*!< Shutdown button for the pilot */
-    FEEDBACK_NAME_SHUTDOWN_LEFT,       /*!< Mainhoop left shutdown */
-    FEEDBACK_NAME_SHUTDOWN_RIGHT,       /*!< Mainhoop right shutdown */
-    FEEDBACK_NAME_INERTIAL, /*!< Inertial shutdown */
-    FEEDBACK_NAME_COUNT     /*!< Total number of feedback lines */
+    FEEDBACK_NAME_PILOT,          /*!< Shutdown button for the pilot */
+    FEEDBACK_NAME_SHUTDOWN_LEFT,  /*!< Mainhoop left shutdown */
+    FEEDBACK_NAME_SHUTDOWN_RIGHT, /*!< Mainhoop right shutdown */
+    FEEDBACK_NAME_INERTIAL,       /*!< Inertial shutdown */
+    FEEDBACK_NAME_COUNT           /*!< Total number of feedback lines */
 };
 
 #elif defined(DAS_REAR)
@@ -36,8 +36,8 @@ enum FeedbackName : uint8_t {
 #error "Either DAS_FRONT or DAS_REAR must be defined"
 #endif
 
-#define FEEDBACK_THRESHOLD_LOW (300)
-#define FEEDBACK_THRESHOLD_HIGH (3900)
+#define FEEDBACK_THRESHOLD_LOW_MV (300)
+#define FEEDBACK_THRESHOLD_HIGH_MV (3900)
 
 /*!
  * \brief Possible return codes for feedback initialization function
