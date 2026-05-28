@@ -15,8 +15,8 @@
  */
 enum FeedbackName : uint8_t {
     FEEDBACK_NAME_PILOT,    /*!< Shutdown button for the pilot */
-    FEEDBACK_NAME_SX,       /*!< Mainhoop SX shutdown */
-    FEEDBACK_NAME_DX,       /*!< Mainhoop DX shutdown */
+    FEEDBACK_NAME_SHUTDOWN_LEFT,       /*!< Mainhoop left shutdown */
+    FEEDBACK_NAME_SHUTDOWN_RIGHT,       /*!< Mainhoop right shutdown */
     FEEDBACK_NAME_INERTIAL, /*!< Inertial shutdown */
     FEEDBACK_NAME_COUNT     /*!< Total number of feedback lines */
 };
