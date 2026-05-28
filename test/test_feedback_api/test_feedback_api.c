@@ -46,15 +46,9 @@ void test_feedback_api_init_should_set_all_feedbacks_to_error(void) {
     enum FeedbackReturnCode rc = feedback_api_init();
 
     TEST_ASSERT_EQUAL_UINT8(FEEDBACK_RC_OK, rc);
-
-    // actual_states used for conversion enum --> uint8_t
-    for (uint8_t i = 0U; i < (uint8_t)FEEDBACK_NAME_COUNT; i++) {
-        actual_states[i] = (uint8_t)feedback_api_handler.feedback_line_state[i];
-    }
-
     TEST_ASSERT_EQUAL_UINT8_ARRAY_MESSAGE(
         expected_states,
-        actual_states,
+        feedback_api_handler.feedback_line_state,
         FEEDBACK_NAME_COUNT,
         "Each feedback state should be initialized to FEEDBACK_STATE_ERROR");
 }
