@@ -25,7 +25,7 @@ int16_t potentiometer_api_get_value(enum PotentiometerName potentiometer) {
     return (int16_t)potentiometer_api_handler.potentiometer_value[potentiometer];
 }
 
-enum PotentiometerReturnCode potentiometer_api_set_state(enum PotentiometerName potentiometer, uint16_t value) {
+enum PotentiometerReturnCode potentiometer_api_set_value(enum PotentiometerName potentiometer, uint16_t value) {
     if (potentiometer >= POTENTIOMETER_NAME_COUNT || value >= 4096) {
         return POTENTIOMETER_RC_ERROR;
     }

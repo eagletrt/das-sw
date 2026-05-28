@@ -62,7 +62,7 @@ void MX_ADC1_Init(void) {
     hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
     hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
     hadc1.Init.LowPowerAutoWait = DISABLE;
-    hadc1.Init.ContinuousConvMode = DISABLE;
+    hadc1.Init.ContinuousConvMode = ENABLE;
     hadc1.Init.NbrOfConversion = 5;
     hadc1.Init.DiscontinuousConvMode = DISABLE;
     hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -147,7 +147,7 @@ void MX_ADC2_Init(void) {
     hadc2.Init.ScanConvMode = ADC_SCAN_ENABLE;
     hadc2.Init.EOCSelection = ADC_EOC_SEQ_CONV;
     hadc2.Init.LowPowerAutoWait = DISABLE;
-    hadc2.Init.ContinuousConvMode = DISABLE;
+    hadc2.Init.ContinuousConvMode = ENABLE;
     hadc2.Init.NbrOfConversion = 2;
     hadc2.Init.DiscontinuousConvMode = DISABLE;
     hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -466,6 +466,14 @@ enum FeedbackReturnCode adc_stop_dma_feedback(void) {
     return HAL_ADC_Stop_DMA(hadc_feedback) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
+enum PotentiometerReturnCode adc_start_dma_potentiometer(void) {
+    return HAL_ADC_Start_DMA(&hadc2, (uint32_t *)potentiometer_value, POTENTIOMETER_NAME_COUNT) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
+}
+
+enum PotentiometerReturnCode adc_stop_dma_potentiometer(void) {
+    return HAL_ADC_Stop_DMA(&hadc2) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
+}
+
 EAGLETRT_STATIC void adc_feedbacks_read(void) {
     enum FeedbackState state = FEEDBACK_STATE_ERROR;
     for (enum FeedbackName feedback = 0; feedback < FEEDBACK_NAME_COUNT; ++feedback) {
@@ -488,7 +496,7 @@ EAGLETRT_STATIC void adc_potentiometer_read(void) {
     for (int i = 0; i < POTENTIOMETER_NAME_COUNT; i++) {
         potentiometer = i;
         value = potentiometer_value[i];
-        if (potentiometer_api_set_state(potentiometer, value) == POTENTIOMETER_RC_ERROR) {
+        if (potentiometer_api_set_value(potentiometer, value) == POTENTIOMETER_RC_ERROR) {
             // print ?
         }
     }
