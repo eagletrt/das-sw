@@ -14,16 +14,7 @@ void setUp(void) {
 void tearDown(void) {
 }
 
-void test_feedback_api_init_should_return_ok(void) {
-    enum FeedbackReturnCode rc = feedback_api_init();
-
-    TEST_ASSERT_EQUAL_UINT8_MESSAGE(
-        FEEDBACK_RC_OK,
-        rc,
-        "feedback_api_init() should return FEEDBACK_RC_OK");
-}
-
-void test_feedback_api_init_should_set_all_feedbacks_to_error(void) {
+void test_feedback_api_init_should_return_ok_and_set_all_feedbacks_to_error(void) {
     uint8_t expected_states[FEEDBACK_NAME_COUNT];
 
     for (uint8_t i = 0U; i < FEEDBACK_NAME_COUNT; i++) {
@@ -34,6 +25,7 @@ void test_feedback_api_init_should_set_all_feedbacks_to_error(void) {
     enum FeedbackReturnCode rc = feedback_api_init();
 
     TEST_ASSERT_EQUAL_UINT8(FEEDBACK_RC_OK, rc);
+
     TEST_ASSERT_EQUAL_UINT8_ARRAY_MESSAGE(
         expected_states,
         feedback_api_handler.feedback_line_state,
@@ -128,8 +120,7 @@ void test_feedback_api_set_state_should_reject_invalid_state_count(void) {
 int main(void) {
     UNITY_BEGIN();
 
-    RUN_TEST(test_feedback_api_init_should_return_ok);
-    RUN_TEST(test_feedback_api_init_should_set_all_feedbacks_to_error);
+    RUN_TEST(test_feedback_api_init_should_return_ok_and_set_all_feedbacks_to_error);
     RUN_TEST(test_feedback_api_get_state_should_return_saved_state_for_valid_feedback);
     RUN_TEST(test_feedback_api_get_state_should_return_error_for_invalid_feedback_count);
     RUN_TEST(test_feedback_api_set_state_should_update_state_for_valid_input);
