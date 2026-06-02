@@ -25,7 +25,7 @@
 #include "eagletrt-api.h"
 
 // const pointers to hadc
-static ADC_HandleTypeDef *const hadc_feedback = &hadc1;
+EAGLETRT_STATIC ADC_HandleTypeDef *const hadc_feedback = &hadc1;
 
 EAGLETRT_STATIC uint16_t feedback_value[FEEDBACK_NAME_COUNT];
 /* USER CODE END 0 */
