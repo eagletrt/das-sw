@@ -16,6 +16,7 @@ The finite state machine has:
 #include "fsm.h"
 #include "adc.h"
 #include "feedback-api.h"
+#include "potentiometer-api.h"
 #include "eagletrt-api.h"
 // SEARCH FOR Your Code Here FOR CODE INSERTION POINTS!
 
@@ -165,8 +166,8 @@ fsm_state_t fsm_do_flash(fsm_state_data_t *data) {
 // 1. from init to idle
 void fsm_init_done(fsm_state_data_t *data) {
     /* Your Code Here */
-    feedback_api_init();
     adc_start_dma_feedback();
+    adc_start_dma_potentiometer();
     EAGLETRT_API_UNUSED(data);
 }
 
@@ -175,6 +176,8 @@ void fsm_init_done(fsm_state_data_t *data) {
 void fsm_init_error(fsm_state_data_t *data) {
     /* Your Code Here */
     EAGLETRT_API_UNUSED(data);
+    feedback_api_init();
+    potentiometer_api_init();
 }
 
 // This function is called in 1 transition:
@@ -190,6 +193,8 @@ void fsm_start_flash(fsm_state_data_t *data) {
 void fsm_error_detected(fsm_state_data_t *data) {
     /* Your Code Here */
     EAGLETRT_API_UNUSED(data);
+    feedback_api_init();
+    potentiometer_api_init();
 }
 
 // This function is called in 1 transition:

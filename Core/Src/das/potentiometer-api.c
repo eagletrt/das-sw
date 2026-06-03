@@ -1,15 +1,13 @@
 #include "potentiometer-api.h"
+#include <string.h>
+
+#define MAX_ADC_VALUE 4095
 
 EAGLETRT_STATIC struct PotentiometerHandler potentiometer_api_handler;
 
-/**
- * \attention shall i keep these func? value setted at 0 by default
- */
 enum PotentiometerReturnCode potentiometer_api_init(void) {
     // Initialize potentiometer value to 0 to indicate no data
-    for (int i = 0; i < POTENTIOMETER_NAME_COUNT; i++) {
-        potentiometer_api_handler.potentiometer_value[i] = 0;
-    }
+    memset(&potentiometer_api_handler, 0, sizeof(potentiometer_api_handler));
 
     return POTENTIOMETER_RC_OK;
 }
@@ -26,7 +24,7 @@ int16_t potentiometer_api_get_value(enum PotentiometerName potentiometer) {
 }
 
 enum PotentiometerReturnCode potentiometer_api_set_value(enum PotentiometerName potentiometer, uint16_t value) {
-    if (potentiometer >= POTENTIOMETER_NAME_COUNT || value >= 4096) {
+    if (potentiometer >= POTENTIOMETER_NAME_COUNT || value > MAX_ADC_VALUE) {
         return POTENTIOMETER_RC_ERROR;
     }
 

@@ -27,6 +27,7 @@
 
 // const pointers to hadc
 EAGLETRT_STATIC ADC_HandleTypeDef *const hadc_feedback = &hadc1;
+EAGLETRT_STATIC ADC_HandleTypeDef *const hadc_potentiometer = &hadc2;
 
 EAGLETRT_STATIC uint16_t feedback_value[FEEDBACK_NAME_COUNT];
 EAGLETRT_STATIC uint16_t potentiometer_value[POTENTIOMETER_NAME_COUNT];
@@ -467,11 +468,11 @@ enum FeedbackReturnCode adc_stop_dma_feedback(void) {
 }
 
 enum PotentiometerReturnCode adc_start_dma_potentiometer(void) {
-    return HAL_ADC_Start_DMA(&hadc2, (uint32_t *)potentiometer_value, POTENTIOMETER_NAME_COUNT) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
+    return HAL_ADC_Start_DMA(hadc_potentiometer, (uint32_t *)potentiometer_value, POTENTIOMETER_NAME_COUNT) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
 }
 
 enum PotentiometerReturnCode adc_stop_dma_potentiometer(void) {
-    return HAL_ADC_Stop_DMA(&hadc2) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
+    return HAL_ADC_Stop_DMA(hadc_potentiometer) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
 }
 
 EAGLETRT_STATIC void adc_feedbacks_read(void) {
@@ -491,11 +492,9 @@ EAGLETRT_STATIC void adc_feedbacks_read(void) {
 }
 
 EAGLETRT_STATIC void adc_potentiometer_read(void) {
-    enum PotentiometerName potentiometer;
     uint16_t value;
-    for (int i = 0; i < POTENTIOMETER_NAME_COUNT; i++) {
-        potentiometer = i;
-        value = potentiometer_value[i];
+    for (enum PotentiometerName potentiometer = 0; potentiometer < POTENTIOMETER_NAME_COUNT; ++potentiometer) {
+        value = potentiometer_value[potentiometer];
         if (potentiometer_api_set_value(potentiometer, value) == POTENTIOMETER_RC_ERROR) {
             // print ?
         }
@@ -506,7 +505,7 @@ EAGLETRT_STATIC void adc_potentiometer_read(void) {
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     if (hadc == hadc_feedback) {
         adc_feedbacks_read();
-    } else if (hadc->Instance == ADC2) { // POTENTIOMETER
+    } else if (hadc == hadc_potentiometer) {
         adc_potentiometer_read();
     }
 }

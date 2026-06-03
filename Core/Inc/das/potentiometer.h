@@ -7,16 +7,16 @@
 /*!
  * \brief Names for checked potentiometer
  */
-enum PotentiometerName {
-    POTENTIOMETER_NAME_1,    /*!< Potentiometer N1 */
-    POTENTIOMETER_NAME_2,    /*!< Potentiometer N2 */
-    POTENTIOMETER_NAME_COUNT /*!< Total number of potentiometers */
+enum PotentiometerName : uint8_t {
+    POTENTIOMETER_NAME_LEFT,  /*!< Potentiometer LEFT */
+    POTENTIOMETER_NAME_RIGHT, /*!< Potentiometer RIGHT */
+    POTENTIOMETER_NAME_COUNT  /*!< Total number of potentiometers */
 };
 
 /*!
  * \brief Possible return codes for potentiometer initialization function
  */
-enum PotentiometerReturnCode {
+enum PotentiometerReturnCode : uint8_t {
     POTENTIOMETER_RC_OK,   /*!< Initialization successful */
     POTENTIOMETER_RC_ERROR /*!< Error during initialization */
 };
