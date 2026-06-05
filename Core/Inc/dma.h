@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    adc.h
+  * @file    dma.h
   * @brief   This file contains all the function prototypes for
-  *          the adc.c file
+  *          the dma.c file
   ******************************************************************************
   * @attention
   *
@@ -18,8 +18,8 @@
   */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __ADC_H__
-#define __ADC_H__
+#ifndef __DMA_H__
+#define __DMA_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,41 +28,19 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+/* DMA memory to memory transfer handles -------------------------------------*/
+
 /* USER CODE BEGIN Includes */
-#include "feedback.h"
+
 /* USER CODE END Includes */
-
-extern ADC_HandleTypeDef hadc1;
-
-extern ADC_HandleTypeDef hadc2;
-
-extern ADC_HandleTypeDef hadc3;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-void MX_ADC1_Init(void);
-void MX_ADC2_Init(void);
-void MX_ADC3_Init(void);
+void MX_DMA_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
-/*!
- * \brief Start DMA for feedback lines
- * 
- * \retval FEEDBACK_RC_OK if DMA started successfully
- * \retval FEEDBACK_RC_ERROR if HAL API doesn't work
- */
-enum FeedbackReturnCode adc_start_dma_feedback(void);
-
-/*!
- * \brief Stop DMA for feedback lines
- * 
- * \retval FEEDBACK_RC_OK if DMA stopped successfully
- * \retval FEEDBACK_RC_ERROR if HAL API doesn't work
- */
-enum FeedbackReturnCode adc_stop_dma_feedback(void);
 
 /* USER CODE END Prototypes */
 
@@ -70,4 +48,4 @@ enum FeedbackReturnCode adc_stop_dma_feedback(void);
 }
 #endif
 
-#endif /* __ADC_H__ */
+#endif /* __DMA_H__ */
