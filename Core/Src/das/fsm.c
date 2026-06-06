@@ -80,6 +80,16 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     /* Your Code Here */
     EAGLETRT_API_UNUSED(data);
 
+    if (feedback_api_init() != FEEDBACK_RC_OK) {
+        next_state = FSM_STATE_ERROR;
+    } else if (potentiometer_api_init() != POTENTIOMETER_RC_OK) {
+        next_state = FSM_STATE_ERROR;
+    } else {
+        adc_start_dma_feedback();
+        adc_start_dma_potentiometer();
+        next_state = FSM_STATE_IDLE;
+    }
+
     switch (next_state) {
         case FSM_STATE_IDLE:
         case FSM_STATE_ERROR:
@@ -166,8 +176,6 @@ fsm_state_t fsm_do_flash(fsm_state_data_t *data) {
 // 1. from init to idle
 void fsm_init_done(fsm_state_data_t *data) {
     /* Your Code Here */
-    adc_start_dma_feedback();
-    adc_start_dma_potentiometer();
     EAGLETRT_API_UNUSED(data);
 }
 
@@ -176,8 +184,6 @@ void fsm_init_done(fsm_state_data_t *data) {
 void fsm_init_error(fsm_state_data_t *data) {
     /* Your Code Here */
     EAGLETRT_API_UNUSED(data);
-    feedback_api_init();
-    potentiometer_api_init();
 }
 
 // This function is called in 1 transition:
@@ -193,8 +199,6 @@ void fsm_start_flash(fsm_state_data_t *data) {
 void fsm_error_detected(fsm_state_data_t *data) {
     /* Your Code Here */
     EAGLETRT_API_UNUSED(data);
-    feedback_api_init();
-    potentiometer_api_init();
 }
 
 // This function is called in 1 transition:
