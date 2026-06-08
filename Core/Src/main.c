@@ -21,6 +21,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "fdcan.h"
+#include "fsm.h"
 #include "i2c.h"
 #include "spi.h"
 #include "usart.h"
@@ -107,11 +108,19 @@ int main(void) {
     MX_USART3_UART_Init();
     /* USER CODE BEGIN 2 */
 
+    fsm_state_t state = fsm_run_state(FSM_STATE_IDLE, NULL);
+    if (state == FSM_STATE_IDLE) {
+        adc_start_dma_feedback();
+        adc_start_dma_potentiometer();
+    }
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
+        state = fsm_run_state(state, NULL);
+
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

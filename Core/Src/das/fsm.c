@@ -14,7 +14,6 @@ The finite state machine has:
 ******************************************************************************/
 
 #include "fsm.h"
-#include "adc.h"
 #include "feedback-api.h"
 #include "potentiometer-api.h"
 #include "eagletrt-api.h"
@@ -85,8 +84,6 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     } else if (potentiometer_api_init() != POTENTIOMETER_RC_OK) {
         next_state = FSM_STATE_ERROR;
     } else {
-        adc_start_dma_feedback();
-        adc_start_dma_potentiometer();
         next_state = FSM_STATE_IDLE;
     }
 
