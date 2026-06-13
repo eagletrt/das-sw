@@ -1,7 +1,7 @@
 #include "potentiometer-api.h"
 #include <string.h>
 
-#define MAX_ADC_VALUE 4095
+#define MAX_ADC_VALUE (4095)
 
 EAGLETRT_STATIC struct PotentiometerHandler potentiometer_api_handler;
 
