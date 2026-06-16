@@ -29,7 +29,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "fsm.h"
+#include "potentiometer.h"
+#include "feedback.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,23 +109,25 @@ int main(void) {
     MX_UART5_Init();
     MX_USART3_UART_Init();
     /* USER CODE BEGIN 2 */
+    fsm_state_t current_state = fsm_run_state(FSM_STATE_INIT, NULL);
 
-    fsm_state_t state = fsm_run_state(FSM_STATE_IDLE, NULL);
-    if (state == FSM_STATE_IDLE) {
-        adc_start_dma_feedback();
-        adc_start_dma_potentiometer();
+    if (adc_start_dma_feedback() == FEEDBACK_RC_ERROR) {
+        current_state = FSM_STATE_ERROR;
+    } else if (adc_start_dma_potentiometer() == POTENTIOMETER_RC_ERROR) {
+        current_state = FSM_STATE_ERROR;
     }
-
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
-        state = fsm_run_state(state, NULL);
-
+        current_state = fsm_run_state(current_state, NULL);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
+        if (current_state == FSM_STATE_FLASH || current_state == FSM_STATE_ERROR) {
+            // manage fatal case --> fsm events
+        }
     }
     /* USER CODE END 3 */
 }
