@@ -125,9 +125,6 @@ int main(void) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        if (current_state == FSM_STATE_FLASH || current_state == FSM_STATE_ERROR) {
-            // manage fatal case --> fsm events
-        }
     }
     /* USER CODE END 3 */
 }
