@@ -67,7 +67,7 @@ enum CanCommunicationReturnCode can_communication_api_process_rx(void *applicati
         return CAN_COMM_RC_NULL_POINTER;
     }
 
-    for (int i = 0; i < (int)CAN_COMM_NET_COUNT; ++i) {
+    for (uint8_t i = 0; i < CAN_COMM_NET_COUNT; ++i) {
         struct PalHandler *target_pal = prv_can_communication_get_pal_handler_by_network_id((enum CanCommunicationNetwork)i);
 
         if (target_pal == NULL) {
@@ -126,7 +126,7 @@ enum CanCommunicationReturnCode can_communication_api_process_tx(void) {
         return CAN_COMM_RC_NULL_POINTER;
     }
 
-    for (int i = 0; i < (int)CAN_COMM_NET_COUNT; ++i) {
+    for (uint8_t i = 0; i < CAN_COMM_NET_COUNT; ++i) {
         struct PalHandler *target_pal = prv_can_communication_get_pal_handler_by_network_id((enum CanCommunicationNetwork)i);
 
         if (target_pal == NULL) {

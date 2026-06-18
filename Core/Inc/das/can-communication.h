@@ -6,7 +6,7 @@
 /*!
  * \brief System return and status codes for CAN communication operations.
  */
-enum CanCommunicationReturnCode {
+enum CanCommunicationReturnCode : uint8_t {
     CAN_COMM_RC_OK,                 /*!< Operation completed successfully. */
     CAN_COMM_RC_ERROR,              /*!< Operation not completed due to an internal system error. */
     CAN_COMM_RC_NULL_POINTER,       /*!< An invalid NULL pointer was passed to the module. */
@@ -18,7 +18,7 @@ enum CanCommunicationReturnCode {
 /*!
  * \brief Identifiers for the physical CAN networks managed by the DAS.
  */
-enum CanCommunicationNetwork {
+enum CanCommunicationNetwork : uint8_t {
     CAN_COMM_NET_PRIMARY,   /*!< Target the Primary CAN bus. */
     CAN_COMM_NET_SECONDARY, /*!< Target the Secondary CAN bus. */
     CAN_COMM_NET_COUNT      /*!< Sentinel value used exclusively to verify network parameter validity. */
