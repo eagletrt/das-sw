@@ -21,6 +21,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "fdcan.h"
+#include "fsm.h"
 #include "i2c.h"
 #include "spi.h"
 #include "usart.h"
@@ -28,7 +29,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "fsm.h"
+#include "potentiometer.h"
+#include "feedback.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -106,12 +109,19 @@ int main(void) {
     MX_UART5_Init();
     MX_USART3_UART_Init();
     /* USER CODE BEGIN 2 */
+    fsm_state_t current_state = fsm_run_state(FSM_STATE_INIT, NULL);
 
+    if (adc_start_dma_feedback() == FEEDBACK_RC_ERROR) {
+        current_state = FSM_STATE_ERROR;
+    } else if (adc_start_dma_potentiometer() == POTENTIOMETER_RC_ERROR) {
+        current_state = FSM_STATE_ERROR;
+    }
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
+        current_state = fsm_run_state(current_state, NULL);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

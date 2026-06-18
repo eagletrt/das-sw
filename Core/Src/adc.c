@@ -22,12 +22,15 @@
 
 /* USER CODE BEGIN 0 */
 #include "feedback-api.h"
+#include "potentiometer-api.h"
 #include "eagletrt-api.h"
 
 // const pointers to hadc
 EAGLETRT_STATIC ADC_HandleTypeDef *const hadc_feedback = &hadc1;
+EAGLETRT_STATIC ADC_HandleTypeDef *const hadc_potentiometer = &hadc2;
 
 EAGLETRT_STATIC uint16_t feedback_value[FEEDBACK_NAME_COUNT];
+EAGLETRT_STATIC uint16_t potentiometer_value[POTENTIOMETER_NAME_COUNT];
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
@@ -60,7 +63,7 @@ void MX_ADC1_Init(void) {
     hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
     hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
     hadc1.Init.LowPowerAutoWait = DISABLE;
-    hadc1.Init.ContinuousConvMode = DISABLE;
+    hadc1.Init.ContinuousConvMode = ENABLE;
     hadc1.Init.NbrOfConversion = 5;
     hadc1.Init.DiscontinuousConvMode = DISABLE;
     hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -145,7 +148,7 @@ void MX_ADC2_Init(void) {
     hadc2.Init.ScanConvMode = ADC_SCAN_ENABLE;
     hadc2.Init.EOCSelection = ADC_EOC_SEQ_CONV;
     hadc2.Init.LowPowerAutoWait = DISABLE;
-    hadc2.Init.ContinuousConvMode = DISABLE;
+    hadc2.Init.ContinuousConvMode = ENABLE;
     hadc2.Init.NbrOfConversion = 2;
     hadc2.Init.DiscontinuousConvMode = DISABLE;
     hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -464,6 +467,14 @@ enum FeedbackReturnCode adc_stop_dma_feedback(void) {
     return HAL_ADC_Stop_DMA(hadc_feedback) == HAL_OK ? FEEDBACK_RC_OK : FEEDBACK_RC_ERROR;
 }
 
+enum PotentiometerReturnCode adc_start_dma_potentiometer(void) {
+    return HAL_ADC_Start_DMA(hadc_potentiometer, (uint32_t *)potentiometer_value, POTENTIOMETER_NAME_COUNT) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
+}
+
+enum PotentiometerReturnCode adc_stop_dma_potentiometer(void) {
+    return HAL_ADC_Stop_DMA(hadc_potentiometer) == HAL_OK ? POTENTIOMETER_RC_OK : POTENTIOMETER_RC_ERROR;
+}
+
 EAGLETRT_STATIC void adc_feedbacks_read(void) {
     enum FeedbackState state = FEEDBACK_STATE_ERROR;
     for (enum FeedbackName feedback = 0; feedback < FEEDBACK_NAME_COUNT; ++feedback) {
@@ -480,10 +491,22 @@ EAGLETRT_STATIC void adc_feedbacks_read(void) {
     }
 }
 
+EAGLETRT_STATIC void adc_potentiometer_read(void) {
+    uint16_t value;
+    for (enum PotentiometerName potentiometer = 0; potentiometer < POTENTIOMETER_NAME_COUNT; ++potentiometer) {
+        value = potentiometer_value[potentiometer];
+        if (potentiometer_api_set_value(potentiometer, value) == POTENTIOMETER_RC_ERROR) {
+            // print ?
+        }
+    }
+}
+
 // eventually we can set only a flag that indicate which handler we have to call and then start DMA
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     if (hadc == hadc_feedback) {
         adc_feedbacks_read();
+    } else if (hadc == hadc_potentiometer) {
+        adc_potentiometer_read();
     }
 }
 

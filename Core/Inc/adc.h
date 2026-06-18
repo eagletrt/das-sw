@@ -30,6 +30,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include "feedback.h"
+#include "potentiometer.h"
 /* USER CODE END Includes */
 
 extern ADC_HandleTypeDef hadc1;
@@ -63,6 +64,22 @@ enum FeedbackReturnCode adc_start_dma_feedback(void);
  * \retval FEEDBACK_RC_ERROR if HAL API doesn't work
  */
 enum FeedbackReturnCode adc_stop_dma_feedback(void);
+
+/*!
+ * \brief Start DMA for potentiometer
+ * 
+ * \retval POTENTIOMETER_RC_OK if DMA started successfully
+ * \retval POTENTIOMETER_RC_ERROR if HAL API doesn't work
+ */
+enum PotentiometerReturnCode adc_start_dma_potentiometer(void);
+
+/*!
+ * \brief Stop DMA for potentiometer
+ * 
+ * \retval POTENTIOMETER_RC_OK if DMA stopped successfully
+ * \retval POTENTIOMETER_RC_ERROR if HAL API doesn't work
+ */
+enum PotentiometerReturnCode adc_stop_dma_potentiometer(void);
 
 /* USER CODE END Prototypes */
 
