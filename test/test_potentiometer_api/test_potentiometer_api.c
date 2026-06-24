@@ -38,7 +38,7 @@ void test_potentiometer_api_init_should_return_ok_and_set_all_potentiometers_to_
 
 void test_potentiometer_api_get_value_should_return_saved_value(void) {
     enum PotentiometerName potentiometer = POTENTIOMETER_NAME_LEFT;
-    
+
     potentiometer_api_handler.potentiometer_value[potentiometer] = 1;
 
     TEST_ASSERT_EQUAL_INT16_MESSAGE(
