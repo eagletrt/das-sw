@@ -36,7 +36,7 @@ struct AcquisinatorValue {
 };
 
 struct AcquisinatorHandler {
-    EAGLETRT_VOLATILE struct AcquisinatorValue acquisinator_value[ACQUISINATOR_NAME_COUNT]; /*!< Acquisinator values array */
+    struct AcquisinatorValue acquisinator_value[ACQUISINATOR_NAME_COUNT]; /*!< Acquisinator values array */
 };
 
 #endif // ACQUISINATOR_H

@@ -19,7 +19,7 @@ enum AcquisinatorReturnCode acquisinator_api_init(void);
  *
  * \retval struct AcquisinatorValue contains the value of \p acquisinator
  */
-struct AcquisinatorValue acquisinator_api_get_struct_value(enum AcquisinatorName acquisinator);
+struct AcquisinatorValue acquisinator_api_get_values(enum AcquisinatorName acquisinator);
 
 /*!
  * \brief  Set the current state of a acquisinator line

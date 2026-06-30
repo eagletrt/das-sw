@@ -39,7 +39,7 @@ void test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_ze
         "Each acquisinator value should be initialized to 0");
 }
 
-void test_acquisinator_api_get_struct_value_should_return_saved_value(void) {
+void test_acquisinator_api_get_values_should_return_saved_value(void) {
     enum AcquisinatorName acquisinator = ACQUISINATOR_NAME_FIRST;
 
     acquisinator_api_handler.acquisinator_value[acquisinator].first_strain_gauge = 1;
@@ -47,17 +47,17 @@ void test_acquisinator_api_get_struct_value_should_return_saved_value(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         1,
-        acquisinator_api_get_struct_value(acquisinator).first_strain_gauge,
-        "acquisinator_api_get_struct_value() should return the saved value for each valid acquisinator");
+        acquisinator_api_get_values(acquisinator).first_strain_gauge,
+        "acquisinator_api_get_values() should return the saved value for each valid acquisinator");
 }
 
-void test_acquisinator_api_get_struct_value_should_return_zero_for_invalid_acquisinator_count(void) {
-    struct AcquisinatorValue acquisinator_value = acquisinator_api_get_struct_value(ACQUISINATOR_NAME_COUNT);
+void test_acquisinator_api_get_values_should_return_uint32_max_for_invalid_acquisinator_count(void) {
+    struct AcquisinatorValue acquisinator_value = acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT);
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
-        0U,
+        UINT32_MAX,
         acquisinator_value.first_strain_gauge,
-        "acquisinator_api_get_struct_value(ACQUISINATOR_NAME_COUNT) should return zero");
+        "acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT) should return uint32_max");
 }
 
 void test_acquisinator_api_set_values_should_update_value_for_valid_input(void) {
@@ -112,8 +112,8 @@ int main(void) {
     UNITY_BEGIN();
 
     RUN_TEST(test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_zero);
-    RUN_TEST(test_acquisinator_api_get_struct_value_should_return_saved_value);
-    RUN_TEST(test_acquisinator_api_get_struct_value_should_return_zero_for_invalid_acquisinator_count);
+    RUN_TEST(test_acquisinator_api_get_values_should_return_saved_value);
+    RUN_TEST(test_acquisinator_api_get_values_should_return_uint32_max_for_invalid_acquisinator_count);
     RUN_TEST(test_acquisinator_api_set_values_should_update_value_for_valid_input);
     RUN_TEST(test_acquisinator_api_set_values_should_return_error_and_reject_invalid_acquisinator_count);
 
