@@ -25,8 +25,8 @@ enum IrtsReturnCode : uint8_t {
  * \brief Struct that handles all temperature from irts
  */
 struct IrtsHandler {
-    EAGLETRT_VOLATILE double left_temperature;
-    EAGLETRT_VOLATILE double right_temperature;
+    float left_temperature;
+    float right_temperature;
 };
 
 #endif // IRTS_H

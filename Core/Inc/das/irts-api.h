@@ -17,17 +17,17 @@ enum IrtsReturnCode irts_api_init(void);
  *
  * \param irts The irts to query
  *
- * \retval int16_t value of \p irts
+ * \retval int16_t temperature of \p irts
  */
-double irts_api_get_value(enum IrtsName irts);
+float irts_api_get_temperature(enum IrtsName irts);
 
 /*!
  * \brief  Set the current state of a irts line
  *
  * \param irts The irts to be set
- * \param value The value to set \p irts to
+ * \param temperature The temperature to set \p irts to
  *
  * \retval IRTS_RC_OK if successful
- * \retval IRTS_RC_ERROR if \p irts or \p value are out of bounds
+ * \retval IRTS_RC_ERROR if \p irts or \p temperature are out of bounds
  */
-enum IrtsReturnCode irts_api_set_value(enum IrtsName irts, double value);
+enum IrtsReturnCode irts_api_set_temperature(enum IrtsName irts, float temperature);
