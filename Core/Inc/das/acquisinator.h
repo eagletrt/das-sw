@@ -30,9 +30,9 @@ enum AcquisinatorReturnCode : uint8_t {
  *
  * \note 3 acquisinator for each tyre, each acquisinator collect 2 strain gauge value
  */
-struct AcquisinatorValue {
-    float first_strain_gauge;
-    float second_strain_gauge;
+struct AcquisinatorStrainGauge {
+    float first;
+    float second;
 };
 
 struct AcquisinatorHandler {
