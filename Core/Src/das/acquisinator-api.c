@@ -13,7 +13,7 @@ enum AcquisinatorReturnCode acquisinator_api_init(void) {
 struct AcquisinatorValue acquisinator_api_get_values(enum AcquisinatorName acquisinator) {
     if (acquisinator >= ACQUISINATOR_NAME_COUNT) {
         // create a struct with all data set to 0
-        struct AcquisinatorValue empty_value = { UINT32_MAX };
+        struct AcquisinatorValue empty_value = { 0 };
         return empty_value;
     }
 
