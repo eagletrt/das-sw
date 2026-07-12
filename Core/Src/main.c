@@ -117,11 +117,6 @@ int main(void) {
     } else if (adc_start_dma_potentiometer() == POTENTIOMETER_RC_ERROR) {
         current_state = FSM_STATE_ERROR;
     }
-#if defined(DAS_FRONT)
-    else if (spi_start_it_encoder() == ENCODER_RC_ERROR) {
-        current_state = FSM_STATE_ERROR;
-    }
-#endif
     /* USER CODE END 2 */
 
     /* Infinite loop */

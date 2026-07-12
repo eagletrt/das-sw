@@ -1,24 +1,16 @@
-#include "spi.h"
 #include "eagletrt.h"
+#include <stdint.h>
 
-#include "limits.h"
-#include "spi.h"
-#include "tim.h"
-#include "usart.h"
+#define ENCODER_ROLLAVG_SIZE (5)
 
-#include <float.h>
-#include <math.h>
-#include <string.h>
-
-#define ENC_ROLLAVG_SIZE (5)
-
-EAGLETRT_STATIC uint8_t buf[2];
+extern uint8_t encoder_raw_buf[2];
+extern float encoder_rolling_average;
 
 /*!
  * \brief Converts raw data of encoder into angle
  *
- * \param byte0 less significant byte of original message
- * \param byte1 most significant byte of original message
+ * \param byte0 less significant byte of raw value
+ * \param byte1 most significant byte of raw value
  * 
  * \retval float angle converted
  */

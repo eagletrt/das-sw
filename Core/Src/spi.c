@@ -25,10 +25,9 @@
 #include "encoder-api.h"
 #include "encoder-utils.h"
 
+#if defined(DAS_FRONT)
 EAGLETRT_STATIC SPI_HandleTypeDef *const hspi_encoder = &hspi1;
-
-uint8_t buf[2] = { 0 };
-float encoder_rolling_average = 0;
+#endif // DAS_FRONT
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
@@ -232,11 +231,11 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
     if (hspi == hspi_encoder) {
-        uint16_t angle = raw_to_angle(buf[0], buf[1]);
-        encoder_rolling_average = update_rolling_average(encoder_inplace_average, angle);
+        uint16_t angle = raw_to_angle(encoder_raw_buf[0], encoder_raw_buf[1]);
+        encoder_rolling_average = update_rolling_average(encoder_rolling_average, angle);
 
-        if (encoder_api_set_angle(ENCODER_NAME_STEERING, encoder_rollin_average) != ENCODER_RC_OK) {
-            encoder_hardware_error = true;
+        if (encoder_api_set_angle(encoder_rolling_average) != ENCODER_RC_OK) {
+            //
         }
     }
 }

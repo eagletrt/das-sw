@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#if defined(DAS_FRONT)
+
 /*!
  * \brief Initializes the module
  *
@@ -28,3 +30,5 @@ float encoder_api_get_angle(void);
  * \retval ENCODER_RC_ERROR if \p encoder or \p state are out of bounds
  */
 enum EncoderReturnCode encoder_api_set_angle(float angle);
+
+#endif // DAS_FRONT
