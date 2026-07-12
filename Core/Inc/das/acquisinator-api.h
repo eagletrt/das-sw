@@ -31,4 +31,4 @@ struct AcquisinatorValue acquisinator_api_get_values(enum AcquisinatorName acqui
  * \retval ACQUISINATOR_RC_OK if successful
  * \retval ACQUISINATOR_RC_ERROR if \p acquisinator are out of bounds
  */
-enum AcquisinatorReturnCode acquisinator_api_set_values(enum AcquisinatorName acquisinator, float first_strain_gauge, float second_strain_gauge);
+enum AcquisinatorReturnCode acquisinator_api_set_values(enum AcquisinatorName acquisinator, struct AcquisinatorValue strain_gauge);
