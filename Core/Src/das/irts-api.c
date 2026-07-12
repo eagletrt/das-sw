@@ -13,11 +13,11 @@ enum IrtsReturnCode irts_api_init(void) {
 float irts_api_get_temperature(enum IrtsName irts) {
     switch (irts) {
         case IRTS_NAME_LEFT:
-            return (float)irts_api_handler.left_temperature;
+            return irts_api_handler.left_temperature;
         case IRTS_NAME_RIGHT:
-            return (float)irts_api_handler.right_temperature;
+            return irts_api_handler.right_temperature;
         default:
-            return -1;
+            return -1.0f;
     }
 }
 
