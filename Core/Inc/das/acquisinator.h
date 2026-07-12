@@ -36,7 +36,7 @@ struct AcquisinatorStrainGauge {
 };
 
 struct AcquisinatorHandler {
-    struct AcquisinatorValue acquisinator_value[ACQUISINATOR_NAME_COUNT]; /*!< Acquisinator values array */
+    struct AcquisinatorStrainGauge strain_gauges[ACQUISINATOR_NAME_COUNT]; /*!< Acquisinator values array */
 };
 
 #endif // ACQUISINATOR_H
