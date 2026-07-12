@@ -15,14 +15,14 @@ void tearDown(void) {
 }
 
 void test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_zero(void) {
-    struct AcquisinatorValue expected_values[ACQUISINATOR_NAME_COUNT];
+    struct AcquisinatorStrainGauge expected_values[ACQUISINATOR_NAME_COUNT];
 
     for (uint8_t i = 0U; i < (uint8_t)ACQUISINATOR_NAME_COUNT; i++) {
-        acquisinator_api_handler.acquisinator_value[i].first_strain_gauge = 1;
-        acquisinator_api_handler.acquisinator_value[i].second_strain_gauge = 1;
+        acquisinator_api_handler.strain_gauges[i].first = 1;
+        acquisinator_api_handler.strain_gauges[i].second = 1;
 
-        expected_values[i].first_strain_gauge = 0U;
-        expected_values[i].second_strain_gauge = 0U;
+        expected_values[i].first = 0U;
+        expected_values[i].second = 0U;
     }
 
     enum AcquisinatorReturnCode rc = acquisinator_api_init();
@@ -34,7 +34,7 @@ void test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_ze
 
     TEST_ASSERT_EQUAL_FLOAT_ARRAY_MESSAGE(
         expected_values,
-        acquisinator_api_handler.acquisinator_value,
+        acquisinator_api_handler.strain_gauges,
         ACQUISINATOR_NAME_COUNT,
         "Each acquisinator value should be initialized to 0");
 }
@@ -42,21 +42,21 @@ void test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_ze
 void test_acquisinator_api_get_values_should_return_saved_value(void) {
     enum AcquisinatorName acquisinator = ACQUISINATOR_NAME_FIRST;
 
-    acquisinator_api_handler.acquisinator_value[acquisinator].first_strain_gauge = 1;
-    acquisinator_api_handler.acquisinator_value[acquisinator].second_strain_gauge = 1;
+    acquisinator_api_handler.strain_gauges[acquisinator].first = 1;
+    acquisinator_api_handler.strain_gauges[acquisinator].second = 1;
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         1,
-        acquisinator_api_get_values(acquisinator).first_strain_gauge,
+        acquisinator_api_get_values(acquisinator).first,
         "acquisinator_api_get_values() should return the saved value for each valid acquisinator");
 }
 
 void test_acquisinator_api_get_values_should_return_uint32_max_for_invalid_acquisinator_count(void) {
-    struct AcquisinatorValue acquisinator_value = acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT);
+    struct AcquisinatorStrainGauge strain_gauges = acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT);
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         UINT32_MAX,
-        acquisinator_value.first_strain_gauge,
+        strain_gauges.first,
         "acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT) should return uint32_max");
 }
 
@@ -65,8 +65,7 @@ void test_acquisinator_api_set_values_should_update_value_for_valid_input(void) 
 
     enum AcquisinatorReturnCode rc = acquisinator_api_set_values(
         acquisinator,
-        1000U,
-        1000U);
+        (struct AcquisinatorStrainGauge){.first = 100.0f, .second = 100.0f});
 
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(
         ACQUISINATOR_RC_OK,
@@ -74,27 +73,26 @@ void test_acquisinator_api_set_values_should_update_value_for_valid_input(void) 
         "feedback_api_set_state() should return FEEDBACK_RC_OK for valid input");
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
-        1000U,
-        acquisinator_api_handler.acquisinator_value[acquisinator].first_strain_gauge,
+        100.0f,
+        acquisinator_api_handler.strain_gauges[acquisinator].first,
         "acquisinator_api_set_values() should update the requested acquisinator value");
 }
 
 void test_acquisinator_api_set_values_should_return_error_and_reject_invalid_acquisinator_count(void) {
-    struct AcquisinatorValue expected_values[ACQUISINATOR_NAME_COUNT];
+    struct AcquisinatorStrainGauge expected_values[ACQUISINATOR_NAME_COUNT];
     float value = 1;
 
     for (enum AcquisinatorName acquisinator = 0; acquisinator < ACQUISINATOR_NAME_COUNT; ++acquisinator) {
-        acquisinator_api_handler.acquisinator_value[acquisinator].first_strain_gauge = value;
-        acquisinator_api_handler.acquisinator_value[acquisinator].second_strain_gauge = value;
+        acquisinator_api_handler.strain_gauges[acquisinator].first = value;
+        acquisinator_api_handler.strain_gauges[acquisinator].second = value;
 
-        expected_values[acquisinator].first_strain_gauge = value;
-        expected_values[acquisinator].second_strain_gauge = value;
+        expected_values[acquisinator].first = value;
+        expected_values[acquisinator].second = value;
     }
 
     enum AcquisinatorReturnCode rc = acquisinator_api_set_values(
         ACQUISINATOR_NAME_COUNT,
-        1000U,
-        1000U);
+        (struct AcquisinatorStrainGauge){.first = 100.0f, .second = 100.0f});
 
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(
         ACQUISINATOR_RC_ERROR,
@@ -103,7 +101,7 @@ void test_acquisinator_api_set_values_should_return_error_and_reject_invalid_acq
 
     TEST_ASSERT_EQUAL_FLOAT_ARRAY_MESSAGE(
         expected_values,
-        acquisinator_api_handler.acquisinator_value,
+        acquisinator_api_handler.strain_gauges,
         ACQUISINATOR_NAME_COUNT,
         "Invalid acquisinator should not modify any valid acquisinator value");
 }

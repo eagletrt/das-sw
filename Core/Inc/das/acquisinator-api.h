@@ -17,9 +17,9 @@ enum AcquisinatorReturnCode acquisinator_api_init(void);
  *
  * \param acquisinator The acquisinator to query
  *
- * \retval struct AcquisinatorValue contains the value of \p acquisinator
+ * \retval struct AcquisinatorStrainGauge contains the value of \p acquisinator
  */
-struct AcquisinatorValue acquisinator_api_get_values(enum AcquisinatorName acquisinator);
+struct AcquisinatorStrainGauge acquisinator_api_get_values(enum AcquisinatorName acquisinator);
 
 /*!
  * \brief  Set the current state of a acquisinator line
@@ -31,4 +31,4 @@ struct AcquisinatorValue acquisinator_api_get_values(enum AcquisinatorName acqui
  * \retval ACQUISINATOR_RC_OK if successful
  * \retval ACQUISINATOR_RC_ERROR if \p acquisinator are out of bounds
  */
-enum AcquisinatorReturnCode acquisinator_api_set_values(enum AcquisinatorName acquisinator, struct AcquisinatorValue strain_gauge);
+enum AcquisinatorReturnCode acquisinator_api_set_values(enum AcquisinatorName acquisinator, struct AcquisinatorStrainGauge strain_gauge);

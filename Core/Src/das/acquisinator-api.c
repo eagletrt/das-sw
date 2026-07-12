@@ -10,23 +10,23 @@ enum AcquisinatorReturnCode acquisinator_api_init(void) {
     return ACQUISINATOR_RC_OK;
 }
 
-struct AcquisinatorValue acquisinator_api_get_values(enum AcquisinatorName acquisinator) {
+struct AcquisinatorStrainGauge acquisinator_api_get_values(enum AcquisinatorName acquisinator) {
     if (acquisinator >= ACQUISINATOR_NAME_COUNT) {
-        // create a struct with all data set to 0
-        struct AcquisinatorValue empty_value = { 0 };
+        // create a struct with all data set to implausible values
+        struct AcquisinatorStrainGauge empty_value = { .first = UINT32_MAX, .second = UINT32_MAX };
         return empty_value;
     }
 
-    return acquisinator_api_handler.acquisinator_value[acquisinator];
+    return acquisinator_api_handler.strain_gauges[acquisinator];
 }
 
-enum AcquisinatorReturnCode acquisinator_api_set_values(enum AcquisinatorName acquisinator, float first_strain_gauge, float second_strain_gauge) {
+enum AcquisinatorReturnCode acquisinator_api_set_values(enum AcquisinatorName acquisinator, struct AcquisinatorStrainGauge acquisinator_strain_gauge) {
     if (acquisinator >= ACQUISINATOR_NAME_COUNT) {
         return ACQUISINATOR_RC_ERROR;
     }
 
-    acquisinator_api_handler.acquisinator_value[acquisinator].first_strain_gauge = first_strain_gauge;
-    acquisinator_api_handler.acquisinator_value[acquisinator].second_strain_gauge = second_strain_gauge;
+    acquisinator_api_handler.strain_gauges[acquisinator].first = acquisinator_strain_gauge.first;
+    acquisinator_api_handler.strain_gauges[acquisinator].second = acquisinator_strain_gauge.second;
 
     return ACQUISINATOR_RC_OK;
 }
