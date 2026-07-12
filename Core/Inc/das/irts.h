@@ -25,8 +25,7 @@ enum IrtsReturnCode : uint8_t {
  * \brief Struct that handles all temperature from irts
  */
 struct IrtsHandler {
-    float left_temperature;
-    float right_temperature;
+    float irts_temperature[IRTS_NAME_COUNT]; /*!< Irts temperatures array */
 };
 
 #endif // IRTS_H

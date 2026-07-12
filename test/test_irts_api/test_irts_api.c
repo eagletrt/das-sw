@@ -18,8 +18,8 @@ void test_irts_api_init_should_return_ok_and_set_all_irts_to_zero(void) {
     float expected_temperature_left;
     float expected_temperature_right;
 
-    irts_api_handler.left_temperature = 1;
-    irts_api_handler.right_temperature = 1;
+    irts_api_handler.irts_temperature[IRTS_NAME_LEFT] = 1;
+    irts_api_handler.irts_temperature[IRTS_NAME_RIGHT] = 1;
 
     expected_temperature_left = 0U;
     expected_temperature_right = 0U;
@@ -33,19 +33,19 @@ void test_irts_api_init_should_return_ok_and_set_all_irts_to_zero(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         expected_temperature_left,
-        irts_api_handler.left_temperature,
+        irts_api_handler.irts_temperature[IRTS_NAME_LEFT],
         "irts_api_init() should return IRTS_RC_OK");
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         expected_temperature_right,
-        irts_api_handler.right_temperature,
+        irts_api_handler.irts_temperature[IRTS_NAME_RIGHT],
         "irts_api_init() should return IRTS_RC_OK");
 }
 
 void test_irts_api_get_temperature_should_return_saved_temperature(void) {
     enum IrtsName irts = IRTS_NAME_LEFT;
 
-    irts_api_handler.left_temperature = 1;
+    irts_api_handler.irts_temperature[IRTS_NAME_LEFT]= 1;
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         1,
@@ -76,7 +76,7 @@ void test_irts_api_set_temperature_should_update_temperature_for_valid_input(voi
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         1000U,
-        irts_api_handler.left_temperature,
+        irts_api_handler.irts_temperature[IRTS_NAME_LEFT],
         "irts_api_set_temperature() should update the requested irts temperature");
 }
 
@@ -87,8 +87,8 @@ void test_irts_api_set_temperature_should_return_error_and_reject_invalid_irts_c
     for (enum IrtsName irts = 0; irts < IRTS_NAME_COUNT; ++irts) {
         expected_temperatures[irts] = temperature;
     }
-    irts_api_handler.left_temperature = temperature;
-    irts_api_handler.right_temperature = temperature;
+    irts_api_handler.irts_temperature[IRTS_NAME_LEFT] = temperature;
+    irts_api_handler.irts_temperature[IRTS_NAME_RIGHT] = temperature;
 
     enum IrtsReturnCode rc = irts_api_set_temperature(
         IRTS_NAME_COUNT,
@@ -101,12 +101,12 @@ void test_irts_api_set_temperature_should_return_error_and_reject_invalid_irts_c
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         temperature,
-        irts_api_handler.left_temperature,
+        irts_api_handler.irts_temperature[IRTS_NAME_LEFT],
         "Invalid irts should not modify any valid irts temperature");
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         temperature,
-        irts_api_handler.right_temperature,
+        irts_api_handler.irts_temperature[IRTS_NAME_RIGHT],
         "Invalid irts should not modify any valid irts temperature");
 }
 

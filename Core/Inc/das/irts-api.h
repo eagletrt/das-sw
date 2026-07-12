@@ -17,7 +17,7 @@ enum IrtsReturnCode irts_api_init(void);
  *
  * \param irts The irts to query
  *
- * \retval int16_t temperature of \p irts
+ * \retval float temperature of \p irts
  */
 float irts_api_get_temperature(enum IrtsName irts);
 
