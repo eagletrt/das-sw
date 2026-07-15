@@ -39,7 +39,7 @@ void test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_ze
         "Each acquisinator value should be initialized to 0");
 }
 
-void test_acquisinator_api_get_values_should_return_saved_value(void) {
+void test_acquisinator_api_get_strain_gauge_should_return_saved_value(void) {
     enum AcquisinatorName acquisinator = ACQUISINATOR_NAME_FIRST;
 
     acquisinator_api_handler.strain_gauges[acquisinator].first = 1;
@@ -47,23 +47,23 @@ void test_acquisinator_api_get_values_should_return_saved_value(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         1,
-        acquisinator_api_get_values(acquisinator).first,
-        "acquisinator_api_get_values() should return the saved value for each valid acquisinator");
+        acquisinator_api_get_strain_gauge(acquisinator).first,
+        "acquisinator_api_get_strain_gauge() should return the saved value for each valid acquisinator");
 }
 
-void test_acquisinator_api_get_values_should_return_uint32_max_for_invalid_acquisinator_count(void) {
-    struct AcquisinatorStrainGauge strain_gauges = acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT);
+void test_acquisinator_api_get_strain_gauge_should_return_uint32_max_for_invalid_acquisinator_count(void) {
+    struct AcquisinatorStrainGauge strain_gauges = acquisinator_api_get_strain_gauge(ACQUISINATOR_NAME_COUNT);
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         UINT32_MAX,
         strain_gauges.first,
-        "acquisinator_api_get_values(ACQUISINATOR_NAME_COUNT) should return uint32_max");
+        "acquisinator_api_get_strain_gauge(ACQUISINATOR_NAME_COUNT) should return uint32_max");
 }
 
-void test_acquisinator_api_set_values_should_update_value_for_valid_input(void) {
+void test_acquisinator_api_set_strain_gauge_should_update_value_for_valid_input(void) {
     enum AcquisinatorName acquisinator = 0U;
 
-    enum AcquisinatorReturnCode rc = acquisinator_api_set_values(
+    enum AcquisinatorReturnCode rc = acquisinator_api_set_strain_gauge(
         acquisinator,
         (struct AcquisinatorStrainGauge){.first = 100.0f, .second = 100.0f});
 
@@ -75,10 +75,10 @@ void test_acquisinator_api_set_values_should_update_value_for_valid_input(void) 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         100.0f,
         acquisinator_api_handler.strain_gauges[acquisinator].first,
-        "acquisinator_api_set_values() should update the requested acquisinator value");
+        "acquisinator_api_set_strain_gauge() should update the requested acquisinator value");
 }
 
-void test_acquisinator_api_set_values_should_return_error_and_reject_invalid_acquisinator_count(void) {
+void test_acquisinator_api_set_strain_gauge_should_return_error_and_reject_invalid_acquisinator_count(void) {
     struct AcquisinatorStrainGauge expected_values[ACQUISINATOR_NAME_COUNT];
     float value = 1;
 
@@ -90,14 +90,14 @@ void test_acquisinator_api_set_values_should_return_error_and_reject_invalid_acq
         expected_values[acquisinator].second = value;
     }
 
-    enum AcquisinatorReturnCode rc = acquisinator_api_set_values(
+    enum AcquisinatorReturnCode rc = acquisinator_api_set_strain_gauge(
         ACQUISINATOR_NAME_COUNT,
         (struct AcquisinatorStrainGauge){.first = 100.0f, .second = 100.0f});
 
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(
         ACQUISINATOR_RC_ERROR,
         rc,
-        "acquisinator_api_set_values(ACQUISINATOR_NAME_COUNT, ...) should return ACQUISINATOR_RC_ERROR");
+        "acquisinator_api_set_strain_gauge(ACQUISINATOR_NAME_COUNT, ...) should return ACQUISINATOR_RC_ERROR");
 
     TEST_ASSERT_EQUAL_FLOAT_ARRAY_MESSAGE(
         expected_values,
@@ -110,10 +110,10 @@ int main(void) {
     UNITY_BEGIN();
 
     RUN_TEST(test_acquisinator_api_init_should_return_ok_and_set_all_acquisinators_to_zero);
-    RUN_TEST(test_acquisinator_api_get_values_should_return_saved_value);
-    RUN_TEST(test_acquisinator_api_get_values_should_return_uint32_max_for_invalid_acquisinator_count);
-    RUN_TEST(test_acquisinator_api_set_values_should_update_value_for_valid_input);
-    RUN_TEST(test_acquisinator_api_set_values_should_return_error_and_reject_invalid_acquisinator_count);
+    RUN_TEST(test_acquisinator_api_get_strain_gauge_should_return_saved_value);
+    RUN_TEST(test_acquisinator_api_get_strain_gauge_should_return_uint32_max_for_invalid_acquisinator_count);
+    RUN_TEST(test_acquisinator_api_set_strain_gauge_should_update_value_for_valid_input);
+    RUN_TEST(test_acquisinator_api_set_strain_gauge_should_return_error_and_reject_invalid_acquisinator_count);
 
     return UNITY_END();
 }
