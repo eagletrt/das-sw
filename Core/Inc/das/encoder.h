@@ -27,7 +27,7 @@ enum EncoderReturnCode : uint8_t {
  * \brief Struct that handles all relevant encoder information
  */
 struct EncoderHandler {
-    float encoder_steering_wheel_angle; /*!< Encoder angle */
+    float steering_wheel_angle; /*!< Encoder angle */
 };
 
 #endif // DAS_FRONT
