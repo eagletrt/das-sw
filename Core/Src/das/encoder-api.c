@@ -13,7 +13,7 @@ enum EncoderReturnCode encoder_api_init(void) {
 }
 
 float encoder_api_get_angle(void) {
-    return (float)encoder_api_handler.encoder_steering_wheel_angle;
+    return encoder_api_handler.encoder_steering_wheel_angle;
 }
 
 enum EncoderReturnCode encoder_api_set_angle(float angle) {
