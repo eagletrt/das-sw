@@ -15,14 +15,12 @@ void tearDown(void) {
 }
 
 void test_irts_api_init_should_return_ok_and_set_all_irts_to_zero(void) {
-    float expected_temperature_left;
-    float expected_temperature_right;
+    float expected_temperatures[IRTS_NAME_COUNT];
 
-    irts_api_handler.irts_temperature[IRTS_NAME_LEFT] = 1;
-    irts_api_handler.irts_temperature[IRTS_NAME_RIGHT] = 1;
-
-    expected_temperature_left = 0U;
-    expected_temperature_right = 0U;
+    for (uint8_t i = 0; i < (uint8_t)IRTS_NAME_COUNT; ++i) {
+        irts_api_handler.irts_temperature[i] = 1;
+        expected_temperatures[i] = 0U;
+    }
 
     enum IrtsReturnCode rc = irts_api_init();
 
@@ -31,21 +29,17 @@ void test_irts_api_init_should_return_ok_and_set_all_irts_to_zero(void) {
         rc,
         "irts_api_init() should return IRTS_RC_OK");
 
-    TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
-        expected_temperature_left,
-        irts_api_handler.irts_temperature[IRTS_NAME_LEFT],
-        "irts_api_init() should return IRTS_RC_OK");
-
-    TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
-        expected_temperature_right,
-        irts_api_handler.irts_temperature[IRTS_NAME_RIGHT],
+    TEST_ASSERT_EQUAL_FLOAT_ARRAY_MESSAGE(
+        expected_temperatures,
+        irts_api_handler.irts_temperature,
+        IRTS_NAME_COUNT,
         "irts_api_init() should return IRTS_RC_OK");
 }
 
 void test_irts_api_get_temperature_should_return_saved_temperature(void) {
     enum IrtsName irts = IRTS_NAME_LEFT;
 
-    irts_api_handler.irts_temperature[IRTS_NAME_LEFT]= 1;
+    irts_api_handler.irts_temperature[IRTS_NAME_LEFT] = 1;
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         1,
@@ -99,14 +93,10 @@ void test_irts_api_set_temperature_should_return_error_and_reject_invalid_irts_c
         rc,
         "irts_api_set_temperature(IRTS_NAME_COUNT, ...) should return IRTS_RC_ERROR");
 
-    TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
-        temperature,
-        irts_api_handler.irts_temperature[IRTS_NAME_LEFT],
-        "Invalid irts should not modify any valid irts temperature");
-
-    TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
-        temperature,
-        irts_api_handler.irts_temperature[IRTS_NAME_RIGHT],
+    TEST_ASSERT_EQUAL_FLOAT_ARRAY_MESSAGE(
+        expected_temperatures,
+        irts_api_handler.irts_temperature,
+        IRTS_NAME_COUNT,
         "Invalid irts should not modify any valid irts temperature");
 }
 

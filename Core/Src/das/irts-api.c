@@ -9,15 +9,18 @@ enum IrtsReturnCode irts_api_init(void) {
 
     return IRTS_RC_OK;
 }
-if (irts >= IRTS_NAME_COUNT) {
-    return -1.0F;
-}
-return irts_api_handler.irts_temperature[irts];
+
+float irts_api_get_temperature(enum IrtsName irts) {
+    if (irts >= IRTS_NAME_COUNT) {
+        return -1.0F;
+    }
+    return irts_api_handler.irts_temperature[irts];
 }
 
 enum IrtsReturnCode irts_api_set_temperature(enum IrtsName irts, float temperature) {
     if (irts >= IRTS_NAME_COUNT) {
         return IRTS_RC_ERROR;
+    }
     irts_api_handler.irts_temperature[irts] = temperature;
 
     return IRTS_RC_OK;
