@@ -19,7 +19,7 @@ enum AcquisinatorReturnCode acquisinator_api_init(void);
  *
  * \retval struct AcquisinatorStrainGauge contains the value of \p acquisinator
  */
-struct AcquisinatorStrainGauge acquisinator_api_get_values(enum AcquisinatorName acquisinator);
+struct AcquisinatorStrainGauge acquisinator_api_get_strain_gauge(enum AcquisinatorName acquisinator);
 
 /*!
  * \brief  Set the current state of a acquisinator line
