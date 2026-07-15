@@ -1,7 +1,6 @@
 #include "unity.h"
 
 #include "encoder-api.h"
-#include "encoder-utils.h"
 #include "encoder.h"
 
 #include <math.h>
@@ -17,7 +16,7 @@ void tearDown(void) {
 }
 
 void test_encoder_api_init_should_return_ok_and_set_angle_to_zero(void) {
-    encoder_api_handler.encoder_steering_wheel_angle = 123.0F;
+    encoder_api_handler.steering_wheel_angle = 123.0F;
 
     enum EncoderReturnCode rc = encoder_api_init();
 
@@ -28,12 +27,12 @@ void test_encoder_api_init_should_return_ok_and_set_angle_to_zero(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         0.0F,
-        encoder_api_handler.encoder_steering_wheel_angle,
+        encoder_api_handler.steering_wheel_angle,
         "The steering encoder angle should be initialized to zero");
 }
 
 void test_encoder_api_get_angle_should_return_saved_angle(void) {
-    encoder_api_handler.encoder_steering_wheel_angle = 87.25F;
+    encoder_api_handler.steering_wheel_angle = 87.25F;
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         87.25F,
@@ -52,7 +51,7 @@ void test_encoder_api_set_angle_should_update_angle_for_valid_input(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         45.5F,
-        encoder_api_handler.encoder_steering_wheel_angle,
+        encoder_api_handler.steering_wheel_angle,
         "The steering encoder angle should be updated");
 }
 

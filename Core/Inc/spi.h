@@ -29,7 +29,8 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-#include "encoder-utils.h"
+// I use extern because in tim.c I need this variable
+extern uint8_t encoder_raw_buf[2];
 /* USER CODE END Includes */
 
 extern SPI_HandleTypeDef hspi1;
