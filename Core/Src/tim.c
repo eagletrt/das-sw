@@ -107,7 +107,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
          * \note Clock rate must be <= 4 MHz (from RM44SC0012B10F2F10 datasheet)
          *       Also, the interval between two consecutive conversions must be > 20 μs
          */
-        volatile HAL_StatusTypeDef status = HAL_SPI_Receive(hspi_encoder, encoder_raw_buf, 2, 100);
+        volatile HAL_StatusTypeDef status = HAL_SPI_Receive_IT(hspi_encoder, encoder_raw_buf, 2);
         if (status != HAL_OK) {
             (void)status;
         }
