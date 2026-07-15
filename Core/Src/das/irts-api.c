@@ -9,16 +9,10 @@ enum IrtsReturnCode irts_api_init(void) {
 
     return IRTS_RC_OK;
 }
-
-float irts_api_get_temperature(enum IrtsName irts) {
-    switch (irts) {
-        case IRTS_NAME_LEFT:
-            return irts_api_handler.irts_temperature[IRTS_NAME_LEFT];
-        case IRTS_NAME_RIGHT:
-            return irts_api_handler.irts_temperature[IRTS_NAME_RIGHT];
-        default:
-            return -1.0f;
-    }
+if (irts >= IRTS_NAME_COUNT) {
+    return -1.0F;
+}
+return irts_api_handler.irts_temperature[irts];
 }
 
 enum IrtsReturnCode irts_api_set_temperature(enum IrtsName irts, float temperature) {
