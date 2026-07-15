@@ -18,13 +18,7 @@ return irts_api_handler.irts_temperature[irts];
 enum IrtsReturnCode irts_api_set_temperature(enum IrtsName irts, float temperature) {
     if (irts >= IRTS_NAME_COUNT) {
         return IRTS_RC_ERROR;
-    }
-
-    if (irts == IRTS_NAME_LEFT) {
-        irts_api_handler.irts_temperature[IRTS_NAME_LEFT] = temperature;
-    } else if (irts == IRTS_NAME_RIGHT) {
-        irts_api_handler.irts_temperature[IRTS_NAME_RIGHT] = temperature;
-    }
+    irts_api_handler.irts_temperature[irts] = temperature;
 
     return IRTS_RC_OK;
 }
