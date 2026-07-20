@@ -26,7 +26,6 @@
 // const pointers to hadc
 #if defined(DAS_FRONT)
 EAGLETRT_STATIC TIM_HandleTypeDef *const htim_encoder = &htim1;
-EAGLETRT_STATIC SPI_HandleTypeDef *const hspi_encoder = &hspi1;
 #endif // DAS_FRONT
 /* USER CODE END 0 */
 
@@ -103,11 +102,7 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *tim_baseHandle) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim == htim_encoder) {
-        /**
-         * \note Clock rate must be <= 4 MHz (from RM44SC0012B10F2F10 datasheet)
-         *       Also, the interval between two consecutive conversions must be > 20 μs
-         */
-        HAL_SPI_Receive_IT(hspi_encoder, encoder_raw_buf, 2);
+        spi_start_read_encoder_it();
     }
 }
 

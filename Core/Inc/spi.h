@@ -29,8 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-// I use extern because in tim.c I need this variable
-extern uint8_t encoder_raw_buf[2];
+#include "encoder.h"
 /* USER CODE END Includes */
 
 extern SPI_HandleTypeDef hspi1;
@@ -45,7 +44,15 @@ void MX_SPI1_Init(void);
 void MX_SPI2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+#if defined(DAS_FRONT)
+/*!
+ * \brief Start SPI reading data for encoder, calling interrupt at the end
+ * 
+ * \retval ENCODER_RC_OK if HAL SPI API started successfully
+ * \retval ENCODER_RC_ERROR if HAL SPI API doesn't work
+ */
+enum EncoderReturnCode spi_start_read_encoder_it();
+#endif // DAS_FRONT
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

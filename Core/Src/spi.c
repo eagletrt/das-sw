@@ -27,7 +27,7 @@
 #if defined(DAS_FRONT)
 
 EAGLETRT_STATIC SPI_HandleTypeDef *const hspi_encoder = &hspi1;
-uint8_t encoder_raw_buf[2] = { 0 };
+EAGLETRT_STATIC uint8_t encoder_raw_buf[2] = { 0 };
 
 #endif // DAS_FRONT
 /* USER CODE END 0 */
@@ -231,6 +231,14 @@ float raw_to_degrees(uint8_t byte0, uint8_t byte1) {
 
     uint16_t parsed = ((uint16_t)((byte1 & second_byte_mask) << 5) | (byte0 >> 3));
     return parsed / (float)uint12_max * degrees_max;
+}
+
+enum EncoderReturnCode spi_start_read_encoder_it() {
+    /**
+     * \note Clock rate must be <= 4 MHz (from RM44SC0012B10F2F10 datasheet)
+     *       Also, the interval between two consecutive conversions must be > 20 μs
+     */
+    return HAL_SPI_Receive_IT(hspi_encoder, encoder_raw_buf, 2) == HAL_OK ? ENCODER_RC_OK : ENCODER_RC_ERROR;
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
