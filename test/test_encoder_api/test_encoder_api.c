@@ -16,7 +16,8 @@ void tearDown(void) {
 }
 
 void test_encoder_api_init_should_return_ok_and_set_angle_to_zero(void) {
-    encoder_api_handler.steering_wheel_angle = 123.0F;
+    enum EncoderName encoder = (enum EncoderName)0U;
+    encoder_api_handler.steering_wheel_angle[encoder] = 123.0F;
 
     enum EncoderReturnCode rc = encoder_api_init();
 
@@ -27,21 +28,25 @@ void test_encoder_api_init_should_return_ok_and_set_angle_to_zero(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         0.0F,
-        encoder_api_handler.steering_wheel_angle,
+        encoder_api_handler.steering_wheel_angle[encoder],
         "The steering encoder angle should be initialized to zero");
 }
 
 void test_encoder_api_get_angle_should_return_saved_angle(void) {
-    encoder_api_handler.steering_wheel_angle = 87.25F;
+    enum EncoderName encoder = (enum EncoderName)0U;
+    encoder_api_handler.steering_wheel_angle[encoder] = 87.25F;
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         87.25F,
-        encoder_api_get_angle(),
+        encoder_api_get_angle(encoder),
         "encoder_api_get_angle() should return the saved angle");
 }
 
 void test_encoder_api_set_angle_should_update_angle_for_valid_input(void) {
+    enum EncoderName encoder = (enum EncoderName)0U;
+
     enum EncoderReturnCode rc = encoder_api_set_angle(
+        encoder,
         45.5F);
 
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(
@@ -51,7 +56,7 @@ void test_encoder_api_set_angle_should_update_angle_for_valid_input(void) {
 
     TEST_ASSERT_EQUAL_FLOAT_MESSAGE(
         45.5F,
-        encoder_api_handler.steering_wheel_angle,
+        encoder_api_handler.steering_wheel_angle[encoder],
         "The steering encoder angle should be updated");
 }
 

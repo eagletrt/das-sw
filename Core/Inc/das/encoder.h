@@ -9,7 +9,6 @@
 /*!
  * \brief Names for checked shutdowns of DAS FRONT
  */
-// should I keep that? Or I assume that there can be only 1 encoder
 enum EncoderName : uint8_t {
     ENCODER_NAME_STEERING, /*!< Encoder steering wheel */
     ENCODER_NAME_COUNT     /*!< Total number of encoders */
@@ -27,7 +26,7 @@ enum EncoderReturnCode : uint8_t {
  * \brief Struct that handles all relevant encoder information
  */
 struct EncoderHandler {
-    float steering_wheel_angle; /*!< Encoder angle */
+    float steering_wheel_angle[ENCODER_NAME_COUNT]; /*!< Encoder angle */
 };
 
 #endif // DAS_FRONT

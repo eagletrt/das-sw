@@ -229,15 +229,15 @@ float raw_to_degrees(uint8_t byte0, uint8_t byte1) {
     constexpr uint16_t uint12_max = 0x0FFF;
     constexpr float degrees_max = 360.f;
 
-    uint16_t parsed = ((uint16_t)((byte1 & second_byte_mask) << 5) | (byte0 >> 3);
-    return parsed / (float)uint12_max * max_degrees;
+    uint16_t parsed = ((uint16_t)((byte1 & second_byte_mask) << 5) | (byte0 >> 3));
+    return parsed / (float)uint12_max * degrees_max;
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
     if (hspi == hspi_encoder) {
-        uint16_t angle = raw_to_angle(encoder_raw_buf[0], encoder_raw_buf[1]);
+        uint16_t angle = raw_to_degrees(encoder_raw_buf[0], encoder_raw_buf[1]);
 
-        if (encoder_api_set_angle(angle) != ENCODER_RC_OK) {
+        if (encoder_api_set_angle(ENCODER_NAME_STEERING, angle) != ENCODER_RC_OK) {
             // TODO: check error
         }
     }

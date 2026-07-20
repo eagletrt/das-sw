@@ -12,12 +12,12 @@ enum EncoderReturnCode encoder_api_init(void) {
     return ENCODER_RC_OK;
 }
 
-float encoder_api_get_angle(void) {
-    return encoder_api_handler.steering_wheel_angle;
+float encoder_api_get_angle(enum EncoderName encoder) {
+    return encoder_api_handler.steering_wheel_angle[encoder];
 }
 
-enum EncoderReturnCode encoder_api_set_angle(float angle) {
-    encoder_api_handler.steering_wheel_angle = angle;
+enum EncoderReturnCode encoder_api_set_angle(enum EncoderName encoder, float angle) {
+    encoder_api_handler.steering_wheel_angle[encoder] = angle;
 
     return ENCODER_RC_OK;
 }
