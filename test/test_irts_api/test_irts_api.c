@@ -80,9 +80,8 @@ void test_irts_api_set_temperature_should_return_error_and_reject_invalid_irts_c
 
     for (enum IrtsName irts = 0; irts < IRTS_NAME_COUNT; ++irts) {
         expected_temperatures[irts] = temperature;
+        irts_api_handler.irts_temperature[irts] = temperature;
     }
-    irts_api_handler.irts_temperature[IRTS_NAME_LEFT] = temperature;
-    irts_api_handler.irts_temperature[IRTS_NAME_RIGHT] = temperature;
 
     enum IrtsReturnCode rc = irts_api_set_temperature(
         IRTS_NAME_COUNT,
