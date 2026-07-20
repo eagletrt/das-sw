@@ -224,10 +224,13 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
 /* USER CODE BEGIN 1 */
 #if defined(DAS_FRONT)
 
-float raw_to_angle(uint8_t byte0, uint8_t byte1) {
-    // byte1 contains the 7 most significant bits of the angle, while byte0 contains the 5 least significant bits
-    uint16_t parsed = ((uint16_t)(byte1 & 0b01111111) << 5) | (byte0 & 0b11111000) >> 3;
-    return parsed / 4095.f * 360.f;
+float raw_to_degrees(uint8_t byte0, uint8_t byte1) {
+    constexpr uint8_t second_byte_mask = 0x7F; // 7 most significant bit
+    constexpr uint16_t uint12_max = 0x0FFF;
+    constexpr float degrees_max = 360.f;
+
+    uint16_t parsed = ((uint16_t)((byte1 & second_byte_mask) << 5) | (byte0 >> 3);
+    return parsed / (float)uint12_max * max_degrees;
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
