@@ -65,7 +65,7 @@ void test_acquisinator_api_set_strain_gauge_should_update_value_for_valid_input(
 
     enum AcquisinatorReturnCode rc = acquisinator_api_set_strain_gauge(
         acquisinator,
-        (struct AcquisinatorStrainGauge){.first = 100.0f, .second = 100.0f});
+        (struct AcquisinatorStrainGauge){ .first = 100.0f, .second = 100.0f });
 
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(
         ACQUISINATOR_RC_OK,
@@ -92,7 +92,7 @@ void test_acquisinator_api_set_strain_gauge_should_return_error_and_reject_inval
 
     enum AcquisinatorReturnCode rc = acquisinator_api_set_strain_gauge(
         ACQUISINATOR_NAME_COUNT,
-        (struct AcquisinatorStrainGauge){.first = 100.0f, .second = 100.0f});
+        (struct AcquisinatorStrainGauge){ .first = 100.0f, .second = 100.0f });
 
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(
         ACQUISINATOR_RC_ERROR,
