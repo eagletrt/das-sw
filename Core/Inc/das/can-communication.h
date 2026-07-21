@@ -43,7 +43,7 @@ enum CanCommunicationReturnCode {
 enum CanCommunicationNetwork {
     CAN_COMM_NET_PRIMARY,   /*!< Target the Primary CAN bus. */
     CAN_COMM_NET_SECONDARY, /*!< Target the Secondary CAN bus. */
-    CAN_COMM_NET_INVERTER,  /*!< Target the Inverters CAN bus. */
+    CAN_COMM_NET_PRIVATE,   /*!< Target the Private CAN bus. */
     CAN_COMM_NET_COUNT      /*!< Sentinel value used exclusively to verify network parameter validity. */
 };
 

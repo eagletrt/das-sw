@@ -58,7 +58,7 @@ void MX_FDCAN3_Init(void);
  * \retval CAN_COMMUNICATION_RC_INVALID_LENGTH if the frame length exceeds CAN_COMMUNICATION_FRAME_DATA_SIZE.
  * \retval CAN_COMMUNICATION_RC_TRANSMISSION_ERROR if the underlying HAL call reported a failure.
  */
-enum CanCommunicationReturnCode can_send_primary(const struct CanCommunicationFrame *frame);
+enum CanCommunicationReturnCode fdcan_send_primary(const struct CanCommunicationFrame *frame);
 
 /*!
  * \brief Send a CAN frame on the secondary CAN network.
@@ -70,7 +70,7 @@ enum CanCommunicationReturnCode can_send_primary(const struct CanCommunicationFr
  * \retval CAN_COMMUNICATION_RC_INVALID_LENGTH if the frame length exceeds CAN_COMMUNICATION_FRAME_DATA_SIZE.
  * \retval CAN_COMMUNICATION_RC_TRANSMISSION_ERROR if the underlying HAL call reported a failure.
  */
-enum CanCommunicationReturnCode can_send_secondary(const struct CanCommunicationFrame *frame);
+enum CanCommunicationReturnCode fdcan_send_secondary(const struct CanCommunicationFrame *frame);
 
 /*!
  * \brief Send a CAN frame on the private CAN network.
@@ -82,7 +82,7 @@ enum CanCommunicationReturnCode can_send_secondary(const struct CanCommunication
  * \retval CAN_COMMUNICATION_RC_INVALID_LENGTH if the frame length exceeds CAN_COMMUNICATION_FRAME_DATA_SIZE.
  * \retval CAN_COMMUNICATION_RC_TRANSMISSION_ERROR if the underlying HAL call reported a failure.
  */
-enum CanCommunicationReturnCode can_send_private(const struct CanCommunicationFrame *frame);
+enum CanCommunicationReturnCode fdcan_send_private(const struct CanCommunicationFrame *frame);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

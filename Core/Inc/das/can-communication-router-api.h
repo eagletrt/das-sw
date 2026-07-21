@@ -22,4 +22,4 @@ enum CanCommunicationReturnCode can_communication_router_api_receive_secondary(c
  * \retval CAN_COMMUNICATION_RC_OK on success.
  * \retval CAN_COMMUNICATION_RC_RECEIVE_HANDLER_ERROR if dispatch fails.
  */
-enum CanCommunicationReturnCode can_communication_router_api_receive_inverter(const struct CanCommunicationFrame *frame);
+enum CanCommunicationReturnCode can_communication_router_api_receive_private(const struct CanCommunicationFrame *frame);
