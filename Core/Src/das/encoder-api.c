@@ -1,0 +1,25 @@
+#include "encoder-api.h"
+#include <string.h>
+
+#if defined(DAS_FRONT)
+
+EAGLETRT_STATIC struct EncoderHandler encoder_api_handler;
+
+enum EncoderReturnCode encoder_api_init(void) {
+    // Initialize encoder value to 0 to indicate no data
+    memset(&encoder_api_handler, 0, sizeof(encoder_api_handler));
+
+    return ENCODER_RC_OK;
+}
+
+float encoder_api_get_angle(enum EncoderName encoder) {
+    return encoder_api_handler.steering_wheel_angle[encoder];
+}
+
+enum EncoderReturnCode encoder_api_set_angle(enum EncoderName encoder, float angle) {
+    encoder_api_handler.steering_wheel_angle[encoder] = angle;
+
+    return ENCODER_RC_OK;
+}
+
+#endif // DAS_FRONT

@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    spi.h
+  * @file    tim.h
   * @brief   This file contains all the function prototypes for
-  *          the spi.c file
+  *          the tim.c file
   ******************************************************************************
   * @attention
   *
@@ -18,8 +18,8 @@
   */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __SPI_H__
-#define __SPI_H__
+#ifndef __TIM_H__
+#define __TIM_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,34 +29,23 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-#include "encoder.h"
+#include "spi.h"
 /* USER CODE END Includes */
 
-extern SPI_HandleTypeDef hspi1;
-
-extern SPI_HandleTypeDef hspi2;
+extern TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-void MX_SPI1_Init(void);
-void MX_SPI2_Init(void);
+void MX_TIM1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-#if defined(DAS_FRONT)
-/*!
- * \brief Start SPI reading data for encoder, calling interrupt at the end
- * 
- * \retval ENCODER_RC_OK if HAL SPI API started successfully
- * \retval ENCODER_RC_ERROR if HAL SPI API doesn't work
- */
-enum EncoderReturnCode spi_start_read_encoder_it();
-#endif // DAS_FRONT
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __SPI_H__ */
+#endif /* __TIM_H__ */

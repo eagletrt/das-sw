@@ -21,7 +21,15 @@
 #include "spi.h"
 
 /* USER CODE BEGIN 0 */
+#include "eagletrt-api.h"
+#include "encoder-api.h"
 
+#if defined(DAS_FRONT)
+
+EAGLETRT_STATIC SPI_HandleTypeDef *const hspi_encoder = &hspi1;
+EAGLETRT_STATIC uint8_t encoder_raw_buf[2] = { 0 };
+
+#endif // DAS_FRONT
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
@@ -39,7 +47,7 @@ void MX_SPI1_Init(void) {
     /* USER CODE END SPI1_Init 1 */
     hspi1.Instance = SPI1;
     hspi1.Init.Mode = SPI_MODE_MASTER;
-    hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi1.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
     hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
     hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -106,7 +114,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle) {
     PA4     ------> SPI1_NSS
     PA5     ------> SPI1_SCK
     PB4     ------> SPI1_MISO
-    PB5     ------> SPI1_MOSI
     */
         GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_5;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -115,7 +122,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_5;
+        GPIO_InitStruct.Pin = GPIO_PIN_4;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -181,11 +188,10 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
     PA4     ------> SPI1_NSS
     PA5     ------> SPI1_SCK
     PB4     ------> SPI1_MISO
-    PB5     ------> SPI1_MOSI
     */
         HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4 | GPIO_PIN_5);
 
-        HAL_GPIO_DeInit(GPIOB, GPIO_PIN_4 | GPIO_PIN_5);
+        HAL_GPIO_DeInit(GPIOB, GPIO_PIN_4);
 
         /* USER CODE BEGIN SPI1_MspDeInit 1 */
 
@@ -216,5 +222,34 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
 }
 
 /* USER CODE BEGIN 1 */
+#if defined(DAS_FRONT)
 
+float raw_to_degrees(uint8_t byte0, uint8_t byte1) {
+    constexpr uint8_t second_byte_mask = 0x7F; // 7 most significant bit
+    constexpr uint16_t uint12_max = 0x0FFF;
+    constexpr float degrees_max = 360.f;
+
+    uint16_t parsed = ((uint16_t)((byte1 & second_byte_mask) << 5) | (byte0 >> 3));
+    return parsed / (float)uint12_max * degrees_max;
+}
+
+enum EncoderReturnCode spi_start_read_encoder_it() {
+    /**
+     * \note Clock rate must be <= 4 MHz (from RM44SC0012B10F2F10 datasheet)
+     *       Also, the interval between two consecutive conversions must be > 20 μs
+     */
+    return HAL_SPI_Receive_IT(hspi_encoder, encoder_raw_buf, 2) == HAL_OK ? ENCODER_RC_OK : ENCODER_RC_ERROR;
+}
+
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
+    if (hspi == hspi_encoder) {
+        uint16_t angle = raw_to_degrees(encoder_raw_buf[0], encoder_raw_buf[1]);
+
+        if (encoder_api_set_angle(ENCODER_NAME_STEERING, angle) != ENCODER_RC_OK) {
+            // TODO: check error
+        }
+    }
+}
+
+#endif // DAS_FRONT
 /* USER CODE END 1 */

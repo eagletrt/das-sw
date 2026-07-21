@@ -21,9 +21,9 @@
 #include "adc.h"
 #include "dma.h"
 #include "fdcan.h"
-#include "fsm.h"
 #include "i2c.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -108,6 +108,7 @@ int main(void) {
     MX_UART4_Init();
     MX_UART5_Init();
     MX_USART3_UART_Init();
+    MX_TIM1_Init();
     /* USER CODE BEGIN 2 */
     fsm_state_t current_state = fsm_run_state(FSM_STATE_INIT, NULL);
 
