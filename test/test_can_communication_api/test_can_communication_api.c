@@ -140,12 +140,12 @@ void test_init_success(void) {
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_send,
-        handler.networks[CAN_COMMUNICATION_NETWORK_PRIVATE].send,
+        handler.networks[CAN_COMMUNICATION_NETWORK_DAS].send,
         "Private send callback must be stored");
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_on_receive,
-        handler.networks[CAN_COMMUNICATION_NETWORK_PRIVATE].on_receive,
+        handler.networks[CAN_COMMUNICATION_NETWORK_DAS].on_receive,
         "Private receive callback must be stored");
 }
 
@@ -159,7 +159,7 @@ void test_init_null_send_in_any_slot(void) {
     struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
-    configs[CAN_COMMUNICATION_NETWORK_PRIVATE].send = NULL;
+    configs[CAN_COMMUNICATION_NETWORK_DAS].send = NULL;
 
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_NULL_POINTER,

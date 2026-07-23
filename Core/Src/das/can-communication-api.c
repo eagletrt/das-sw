@@ -57,7 +57,7 @@ EAGLETRT_STATIC enum PalReturnCode prv_pal_send_secondary(const struct PalMessag
  * \brief PAL send message for the private network.
  */
 EAGLETRT_STATIC enum PalReturnCode prv_pal_send_private(const struct PalMessage *message) {
-    return prv_pal_send_dispatch(CAN_COMMUNICATION_NETWORK_PRIVATE, message);
+    return prv_pal_send_dispatch(CAN_COMMUNICATION_NETWORK_DAS, message);
 }
 
 /*!
@@ -142,7 +142,7 @@ enum CanCommunicationReturnCode can_communication_api_init(const struct CanCommu
     const pal_send_callback pal_send_callbacks[CAN_COMMUNICATION_NETWORK_COUNT] = {
         [CAN_COMMUNICATION_NETWORK_PRIMARY] = prv_pal_send_primary,
         [CAN_COMMUNICATION_NETWORK_SECONDARY] = prv_pal_send_secondary,
-        [CAN_COMMUNICATION_NETWORK_PRIVATE] = prv_pal_send_private,
+        [CAN_COMMUNICATION_NETWORK_DAS] = prv_pal_send_private,
     };
 
     for (enum CanCommunicationNetwork network = 0; network < CAN_COMMUNICATION_NETWORK_COUNT; ++network) {

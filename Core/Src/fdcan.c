@@ -348,7 +348,7 @@ EAGLETRT_STATIC_INLINE enum CanCommunicationNetwork prv_can_get_network(
             return CAN_COMMUNICATION_NETWORK_SECONDARY;
 
         case FDCAN3_BASE:
-            return CAN_COMMUNICATION_NETWORK_PRIVATE;
+            return CAN_COMMUNICATION_NETWORK_DAS;
 
         default:
             return CAN_COMMUNICATION_NETWORK_COUNT;
@@ -364,7 +364,7 @@ EAGLETRT_STATIC_INLINE FDCAN_HandleTypeDef *prv_can_get_handler(
         case CAN_COMMUNICATION_NETWORK_SECONDARY:
             return &hfdcan2;
 
-        case CAN_COMMUNICATION_NETWORK_PRIVATE:
+        case CAN_COMMUNICATION_NETWORK_DAS:
             return &hfdcan3;
 
         default:
@@ -494,7 +494,7 @@ enum CanCommunicationReturnCode fdcan_send_secondary(
 
 enum CanCommunicationReturnCode fdcan_send_private(
     const struct CanCommunicationFrame *frame) {
-    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_PRIVATE, frame);
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_DAS, frame);
 }
 
 EAGLETRT_STATIC void prv_can_receive_from_hardware(

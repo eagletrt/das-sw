@@ -125,7 +125,7 @@ int main(void) {
             .cs_enter = __disable_irq,
             .cs_exit = __enable_irq,
         },
-        [CAN_COMMUNICATION_NETWORK_PRIVATE] = {
+        [CAN_COMMUNICATION_NETWORK_DAS] = {
             .send = fdcan_send_private,
             .on_receive = can_communication_router_api_receive_private,
             .cs_enter = __disable_irq,
