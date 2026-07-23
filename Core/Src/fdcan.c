@@ -337,34 +337,34 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcanHandle) {
 EAGLETRT_STATIC_INLINE enum CanCommunicationNetwork prv_can_get_network(
     const FDCAN_HandleTypeDef *hfdcan) {
     if (hfdcan == NULL || hfdcan->Instance == NULL) {
-        return CAN_COMM_NET_COUNT;
+        return CAN_COMMUNICATION_NETWORK_COUNT;
     }
 
     switch ((uintptr_t)hfdcan->Instance) {
         case FDCAN1_BASE:
-            return CAN_COMM_NET_PRIMARY;
+            return CAN_COMMUNICATION_NETWORK_PRIMARY;
 
         case FDCAN2_BASE:
-            return CAN_COMM_NET_SECONDARY;
+            return CAN_COMMUNICATION_NETWORK_SECONDARY;
 
         case FDCAN3_BASE:
-            return CAN_COMM_NET_PRIVATE;
+            return CAN_COMMUNICATION_NETWORK_PRIVATE;
 
         default:
-            return CAN_COMM_NET_COUNT;
+            return CAN_COMMUNICATION_NETWORK_COUNT;
     }
 }
 
 EAGLETRT_STATIC_INLINE FDCAN_HandleTypeDef *prv_can_get_handler(
     enum CanCommunicationNetwork network) {
     switch (network) {
-        case CAN_COMM_NET_PRIMARY:
+        case CAN_COMMUNICATION_NETWORK_PRIMARY:
             return &hfdcan1;
 
-        case CAN_COMM_NET_SECONDARY:
+        case CAN_COMMUNICATION_NETWORK_SECONDARY:
             return &hfdcan2;
 
-        case CAN_COMM_NET_PRIVATE:
+        case CAN_COMMUNICATION_NETWORK_PRIVATE:
             return &hfdcan3;
 
         default:
@@ -484,17 +484,17 @@ EAGLETRT_STATIC enum CanCommunicationReturnCode prv_can_send_to_hardware(
 
 enum CanCommunicationReturnCode fdcan_send_primary(
     const struct CanCommunicationFrame *frame) {
-    return prv_can_send_to_hardware(CAN_COMM_NET_PRIMARY, frame);
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_PRIMARY, frame);
 }
 
 enum CanCommunicationReturnCode fdcan_send_secondary(
     const struct CanCommunicationFrame *frame) {
-    return prv_can_send_to_hardware(CAN_COMM_NET_SECONDARY, frame);
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_SECONDARY, frame);
 }
 
 enum CanCommunicationReturnCode fdcan_send_private(
     const struct CanCommunicationFrame *frame) {
-    return prv_can_send_to_hardware(CAN_COMM_NET_PRIVATE, frame);
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_PRIVATE, frame);
 }
 
 EAGLETRT_STATIC void prv_can_receive_from_hardware(
@@ -518,7 +518,7 @@ EAGLETRT_STATIC void prv_can_receive_from_hardware(
     }
 
     enum CanCommunicationNetwork network = prv_can_get_network(hfdcan);
-    if (network >= CAN_COMM_NET_COUNT) {
+    if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
         return;
     }
 

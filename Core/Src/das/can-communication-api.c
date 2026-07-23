@@ -43,21 +43,21 @@ EAGLETRT_STATIC enum PalReturnCode prv_pal_send_dispatch(enum CanCommunicationNe
  * \brief PAL send message for the primary network.
  */
 EAGLETRT_STATIC enum PalReturnCode prv_pal_send_primary(const struct PalMessage *message) {
-    return prv_pal_send_dispatch(CAN_COMM_NET_PRIMARY, message);
+    return prv_pal_send_dispatch(CAN_COMMUNICATION_NETWORK_PRIMARY, message);
 }
 
 /*!
  * \brief PAL send message for the secondary network.
  */
 EAGLETRT_STATIC enum PalReturnCode prv_pal_send_secondary(const struct PalMessage *message) {
-    return prv_pal_send_dispatch(CAN_COMM_NET_SECONDARY, message);
+    return prv_pal_send_dispatch(CAN_COMMUNICATION_NETWORK_SECONDARY, message);
 }
 
 /*!
  * \brief PAL send message for the private network.
  */
 EAGLETRT_STATIC enum PalReturnCode prv_pal_send_private(const struct PalMessage *message) {
-    return prv_pal_send_dispatch(CAN_COMM_NET_PRIVATE, message);
+    return prv_pal_send_dispatch(CAN_COMMUNICATION_NETWORK_PRIVATE, message);
 }
 
 /*!
@@ -76,7 +76,7 @@ EAGLETRT_STATIC enum CanCommunicationReturnCode prv_can_communication_api_init_n
     if (config.send == NULL || config.on_receive == NULL) {
         return CAN_COMMUNICATION_RC_NULL_POINTER;
     }
-    if (network >= CAN_COMM_NET_COUNT) {
+    if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
         return CAN_COMMUNICATION_RC_INVALID_NETWORK;
     }
     memset(&handler.networks[network], 0, sizeof(handler.networks[network]));
@@ -107,7 +107,7 @@ EAGLETRT_STATIC enum CanCommunicationReturnCode prv_enqueue(enum CanCommunicatio
     if (frame == NULL) {
         return CAN_COMMUNICATION_RC_NULL_POINTER;
     }
-    if (network >= CAN_COMM_NET_COUNT) {
+    if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
         return CAN_COMMUNICATION_RC_INVALID_NETWORK;
     }
     if (frame->length > CAN_COMMUNICATION_FRAME_DATA_SIZE) {
@@ -131,7 +131,7 @@ EAGLETRT_STATIC enum CanCommunicationReturnCode prv_enqueue(enum CanCommunicatio
     }
 }
 
-enum CanCommunicationReturnCode can_communication_api_init(const struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT]) {
+enum CanCommunicationReturnCode can_communication_api_init(const struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT]) {
     if (configs == NULL) {
         return CAN_COMMUNICATION_RC_NULL_POINTER;
     }
@@ -139,13 +139,13 @@ enum CanCommunicationReturnCode can_communication_api_init(const struct CanCommu
     memset(&handler, 0, sizeof(handler));
     arena_allocator_api_init(&handler.arena);
 
-    const pal_send_callback pal_send_callbacks[CAN_COMM_NET_COUNT] = {
-        [CAN_COMM_NET_PRIMARY] = prv_pal_send_primary,
-        [CAN_COMM_NET_SECONDARY] = prv_pal_send_secondary,
-        [CAN_COMM_NET_PRIVATE] = prv_pal_send_private,
+    const pal_send_callback pal_send_callbacks[CAN_COMMUNICATION_NETWORK_COUNT] = {
+        [CAN_COMMUNICATION_NETWORK_PRIMARY] = prv_pal_send_primary,
+        [CAN_COMMUNICATION_NETWORK_SECONDARY] = prv_pal_send_secondary,
+        [CAN_COMMUNICATION_NETWORK_PRIVATE] = prv_pal_send_private,
     };
 
-    for (enum CanCommunicationNetwork network = 0; network < CAN_COMM_NET_COUNT; ++network) {
+    for (enum CanCommunicationNetwork network = 0; network < CAN_COMMUNICATION_NETWORK_COUNT; ++network) {
         const enum CanCommunicationReturnCode return_code = prv_can_communication_api_init_network(network, configs[network], pal_send_callbacks[network]);
         if (return_code != CAN_COMMUNICATION_RC_OK) {
             return return_code;
@@ -164,7 +164,7 @@ enum CanCommunicationReturnCode can_communication_api_add_to_rx(enum CanCommunic
 }
 
 enum CanCommunicationReturnCode can_communications_api_process_tx(enum CanCommunicationNetwork network) {
-    if (network >= CAN_COMM_NET_COUNT) {
+    if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
         return CAN_COMMUNICATION_RC_INVALID_NETWORK;
     }
 
@@ -187,7 +187,7 @@ enum CanCommunicationReturnCode can_communications_api_process_tx(enum CanCommun
 }
 
 enum CanCommunicationReturnCode can_communication_api_process_rx(enum CanCommunicationNetwork network) {
-    if (network >= CAN_COMM_NET_COUNT) {
+    if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
         return CAN_COMMUNICATION_RC_INVALID_NETWORK;
     }
 

@@ -57,9 +57,9 @@ static struct CanCommunicationNetworkConfig default_config(void) {
 }
 
 static void fill_default_configs(
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT]) {
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT]) {
     for (enum CanCommunicationNetwork network = 0;
-         network < CAN_COMM_NET_COUNT;
+         network < CAN_COMMUNICATION_NETWORK_COUNT;
          ++network) {
         configs[network] = default_config();
     }
@@ -94,7 +94,7 @@ void setUp(void) {
     memset(captured_send, 0, sizeof(captured_send));
     memset(captured_receive, 0, sizeof(captured_receive));
 
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT];
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
     can_communication_api_init(configs);
@@ -107,7 +107,7 @@ void setUp(void) {
  */
 
 void test_init_success(void) {
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT];
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
     enum CanCommunicationReturnCode rc =
@@ -120,32 +120,32 @@ void test_init_success(void) {
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_send,
-        handler.networks[CAN_COMM_NET_PRIMARY].send,
+        handler.networks[CAN_COMMUNICATION_NETWORK_PRIMARY].send,
         "Primary send callback must be stored");
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_on_receive,
-        handler.networks[CAN_COMM_NET_PRIMARY].on_receive,
+        handler.networks[CAN_COMMUNICATION_NETWORK_PRIMARY].on_receive,
         "Primary receive callback must be stored");
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_send,
-        handler.networks[CAN_COMM_NET_SECONDARY].send,
+        handler.networks[CAN_COMMUNICATION_NETWORK_SECONDARY].send,
         "Secondary send callback must be stored");
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_on_receive,
-        handler.networks[CAN_COMM_NET_SECONDARY].on_receive,
+        handler.networks[CAN_COMMUNICATION_NETWORK_SECONDARY].on_receive,
         "Secondary receive callback must be stored");
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_send,
-        handler.networks[CAN_COMM_NET_PRIVATE].send,
+        handler.networks[CAN_COMMUNICATION_NETWORK_PRIVATE].send,
         "Private send callback must be stored");
 
     TEST_ASSERT_EQUAL_PTR_MESSAGE(
         fake_on_receive,
-        handler.networks[CAN_COMM_NET_PRIVATE].on_receive,
+        handler.networks[CAN_COMMUNICATION_NETWORK_PRIVATE].on_receive,
         "Private receive callback must be stored");
 }
 
@@ -156,10 +156,10 @@ void test_init_null_configs(void) {
 }
 
 void test_init_null_send_in_any_slot(void) {
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT];
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
-    configs[CAN_COMM_NET_PRIVATE].send = NULL;
+    configs[CAN_COMMUNICATION_NETWORK_PRIVATE].send = NULL;
 
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_NULL_POINTER,
@@ -167,10 +167,10 @@ void test_init_null_send_in_any_slot(void) {
 }
 
 void test_init_null_on_receive_in_any_slot(void) {
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT];
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
-    configs[CAN_COMM_NET_PRIMARY].on_receive = NULL;
+    configs[CAN_COMMUNICATION_NETWORK_PRIMARY].on_receive = NULL;
 
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_NULL_POINTER,
@@ -178,11 +178,11 @@ void test_init_null_on_receive_in_any_slot(void) {
 }
 
 void test_init_accepts_null_critical_section_callbacks(void) {
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT];
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
     for (enum CanCommunicationNetwork network = 0;
-         network < CAN_COMM_NET_COUNT;
+         network < CAN_COMMUNICATION_NETWORK_COUNT;
          ++network) {
         configs[network].cs_enter = NULL;
         configs[network].cs_exit = NULL;
@@ -195,7 +195,7 @@ void test_init_accepts_null_critical_section_callbacks(void) {
 }
 
 void test_init_resets_state_on_repeated_call(void) {
-    struct CanCommunicationNetworkConfig configs[CAN_COMM_NET_COUNT];
+    struct CanCommunicationNetworkConfig configs[CAN_COMMUNICATION_NETWORK_COUNT];
     fill_default_configs(configs);
 
     enum CanCommunicationReturnCode first =
@@ -229,7 +229,7 @@ void test_add_to_tx_success(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_OK,
         can_communication_api_add_to_tx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame));
 }
 
@@ -237,7 +237,7 @@ void test_add_to_tx_null_frame(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_NULL_POINTER,
         can_communication_api_add_to_tx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             NULL));
 }
 
@@ -247,7 +247,7 @@ void test_add_to_tx_invalid_network(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_NETWORK,
         can_communication_api_add_to_tx(
-            CAN_COMM_NET_COUNT,
+            CAN_COMMUNICATION_NETWORK_COUNT,
             &frame));
 }
 
@@ -260,7 +260,7 @@ void test_add_to_tx_invalid_length(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_LENGTH,
         can_communication_api_add_to_tx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame));
 }
 
@@ -274,7 +274,7 @@ void test_add_to_tx_queue_full(void) {
 
     while (rc == CAN_COMMUNICATION_RC_OK) {
         rc = can_communication_api_add_to_tx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame);
 
         if (rc == CAN_COMMUNICATION_RC_OK) {
@@ -306,7 +306,7 @@ void test_add_to_rx_success(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_OK,
         can_communication_api_add_to_rx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame));
 }
 
@@ -314,7 +314,7 @@ void test_add_to_rx_null_frame(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_NULL_POINTER,
         can_communication_api_add_to_rx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             NULL));
 }
 
@@ -324,7 +324,7 @@ void test_add_to_rx_invalid_network(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_NETWORK,
         can_communication_api_add_to_rx(
-            CAN_COMM_NET_COUNT,
+            CAN_COMMUNICATION_NETWORK_COUNT,
             &frame));
 }
 
@@ -337,7 +337,7 @@ void test_add_to_rx_invalid_length(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_LENGTH,
         can_communication_api_add_to_rx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame));
 }
 
@@ -352,12 +352,12 @@ void test_add_to_rx_invalid_length(void) {
 void test_process_tx_invalid_network(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_NETWORK,
-        can_communications_api_process_tx(CAN_COMM_NET_COUNT));
+        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_COUNT));
 }
 
 void test_process_tx_empty_queue_succeeds_without_calling_send(void) {
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMM_NET_PRIMARY);
+        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -375,11 +375,11 @@ void test_process_tx_drains_a_single_frame(void) {
         make_frame(0x456U, 6U);
 
     can_communication_api_add_to_tx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMM_NET_PRIMARY);
+        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -393,7 +393,7 @@ void test_process_tx_drains_a_single_frame(void) {
 }
 
 void test_process_tx_drains_every_queued_frame_in_one_call(void) {
-    handler.networks[CAN_COMM_NET_PRIMARY].send =
+    handler.networks[CAN_COMMUNICATION_NETWORK_PRIMARY].send =
         capturing_send;
 
     for (uint32_t i = 0U; i < 5U; i++) {
@@ -403,12 +403,12 @@ void test_process_tx_drains_every_queued_frame_in_one_call(void) {
                 (uint8_t)(i + 1U));
 
         can_communication_api_add_to_tx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame);
     }
 
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMM_NET_PRIMARY);
+        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -422,7 +422,7 @@ void test_process_tx_drains_every_queued_frame_in_one_call(void) {
 }
 
 void test_process_tx_preserves_frame_contents_and_order(void) {
-    handler.networks[CAN_COMM_NET_PRIMARY].send =
+    handler.networks[CAN_COMMUNICATION_NETWORK_PRIMARY].send =
         capturing_send;
 
     struct CanCommunicationFrame first =
@@ -432,14 +432,14 @@ void test_process_tx_preserves_frame_contents_and_order(void) {
         make_frame(0x222U, 8U);
 
     can_communication_api_add_to_tx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &first);
 
     can_communication_api_add_to_tx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &second);
 
-    can_communications_api_process_tx(CAN_COMM_NET_PRIMARY);
+    can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         2U,
@@ -484,22 +484,22 @@ void test_process_tx_surfaces_send_failure_but_keeps_draining(void) {
         make_frame(0x10U, 1U);
 
     can_communication_api_add_to_tx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     can_communication_api_add_to_tx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     can_communication_api_add_to_tx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     fake_send_fake.return_val =
         CAN_COMMUNICATION_RC_TRANSMISSION_ERROR;
 
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMM_NET_PRIMARY);
+        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_TRANSMISSION_ERROR,
@@ -523,12 +523,12 @@ void test_process_tx_surfaces_send_failure_but_keeps_draining(void) {
 void test_process_rx_invalid_network(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_NETWORK,
-        can_communication_api_process_rx(CAN_COMM_NET_COUNT));
+        can_communication_api_process_rx(CAN_COMMUNICATION_NETWORK_COUNT));
 }
 
 void test_process_rx_empty_queue_succeeds_without_dispatching(void) {
     enum CanCommunicationReturnCode rc =
-        can_communication_api_process_rx(CAN_COMM_NET_PRIMARY);
+        can_communication_api_process_rx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -546,11 +546,11 @@ void test_process_rx_drains_a_single_frame(void) {
         make_frame(0x321U, 7U);
 
     can_communication_api_add_to_rx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     enum CanCommunicationReturnCode rc =
-        can_communication_api_process_rx(CAN_COMM_NET_PRIMARY);
+        can_communication_api_process_rx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -564,7 +564,7 @@ void test_process_rx_drains_a_single_frame(void) {
 }
 
 void test_process_rx_drains_every_queued_frame_in_one_call(void) {
-    handler.networks[CAN_COMM_NET_PRIMARY].on_receive =
+    handler.networks[CAN_COMMUNICATION_NETWORK_PRIMARY].on_receive =
         capturing_receive;
 
     for (uint32_t i = 0U; i < 7U; i++) {
@@ -574,12 +574,12 @@ void test_process_rx_drains_every_queued_frame_in_one_call(void) {
                 (uint8_t)(i + 1U));
 
         can_communication_api_add_to_rx(
-            CAN_COMM_NET_PRIMARY,
+            CAN_COMMUNICATION_NETWORK_PRIMARY,
             &frame);
     }
 
     enum CanCommunicationReturnCode rc =
-        can_communication_api_process_rx(CAN_COMM_NET_PRIMARY);
+        can_communication_api_process_rx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -593,7 +593,7 @@ void test_process_rx_drains_every_queued_frame_in_one_call(void) {
 }
 
 void test_process_rx_preserves_frame_contents_and_order(void) {
-    handler.networks[CAN_COMM_NET_PRIMARY].on_receive =
+    handler.networks[CAN_COMMUNICATION_NETWORK_PRIMARY].on_receive =
         capturing_receive;
 
     struct CanCommunicationFrame first =
@@ -603,14 +603,14 @@ void test_process_rx_preserves_frame_contents_and_order(void) {
         make_frame(0x722U, 5U);
 
     can_communication_api_add_to_rx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &first);
 
     can_communication_api_add_to_rx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &second);
 
-    can_communication_api_process_rx(CAN_COMM_NET_PRIMARY);
+    can_communication_api_process_rx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         2U,
@@ -655,22 +655,22 @@ void test_process_rx_surfaces_dispatcher_failure_but_keeps_draining(void) {
         make_frame(0x10U, 1U);
 
     can_communication_api_add_to_rx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     can_communication_api_add_to_rx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     can_communication_api_add_to_rx(
-        CAN_COMM_NET_PRIMARY,
+        CAN_COMMUNICATION_NETWORK_PRIMARY,
         &frame);
 
     fake_on_receive_fake.return_val =
         CAN_COMMUNICATION_RC_RECEIVE_HANDLER_ERROR;
 
     enum CanCommunicationReturnCode rc =
-        can_communication_api_process_rx(CAN_COMM_NET_PRIMARY);
+        can_communication_api_process_rx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_RECEIVE_HANDLER_ERROR,
