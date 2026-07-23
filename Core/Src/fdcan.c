@@ -340,19 +340,19 @@ EAGLETRT_STATIC_INLINE enum CanCommunicationNetwork prv_can_get_network(
         return CAN_COMM_NET_COUNT;
     }
 
-    if (hfdcan->Instance == FDCAN1) {
-        return CAN_COMM_NET_PRIMARY;
-    }
+    switch ((uintptr_t)hfdcan->Instance) {
+        case FDCAN1_BASE:
+            return CAN_COMM_NET_PRIMARY;
 
-    if (hfdcan->Instance == FDCAN2) {
-        return CAN_COMM_NET_SECONDARY;
-    }
+        case FDCAN2_BASE:
+            return CAN_COMM_NET_SECONDARY;
 
-    if (hfdcan->Instance == FDCAN3) {
-        return CAN_COMM_NET_PRIVATE;
-    }
+        case FDCAN3_BASE:
+            return CAN_COMM_NET_PRIVATE;
 
-    return CAN_COMM_NET_COUNT;
+        default:
+            return CAN_COMM_NET_COUNT;
+    }
 }
 
 EAGLETRT_STATIC_INLINE FDCAN_HandleTypeDef *prv_can_get_handler(
