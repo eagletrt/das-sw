@@ -14,6 +14,9 @@ The finite state machine has:
 ******************************************************************************/
 
 #include "fsm.h"
+#include "acquisinator-api.h"
+#include "can-communication-api.h"
+#include "encoder-api.h"
 #include "feedback-api.h"
 #include "potentiometer-api.h"
 #include "eagletrt-api.h"
@@ -78,9 +81,20 @@ void fsm_event_trigger(fsm_event_data_t *event) {
 fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_STATE_IDLE;
     /* Your Code Here */
-    EAGLETRT_API_UNUSED(data);
+    if (data == NULL) {
+        next_state = FSM_STATE_ERROR;
+    } else if (
+        feedback_api_init() != FEEDBACK_RC_OK ||
+        potentiometer_api_init() != POTENTIOMETER_RC_OK ||
+        acquisinator_api_init() != ACQUISINATOR_RC_OK ||
 
-    if (feedback_api_init() != FEEDBACK_RC_OK || potentiometer_api_init() != POTENTIOMETER_RC_OK) {
+#if defined(DAS_FRONT)
+        encoder_api_init() != ENCODER_RC_OK ||
+#endif
+
+        can_communication_api_init(
+            (const struct CanCommunicationNetworkConfig *)data) !=
+            CAN_COMMUNICATION_RC_OK) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -101,6 +115,20 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
     /* Your Code Here */
     EAGLETRT_API_UNUSED(data);
+
+    for (enum CanCommunicationNetwork network = 0; network < CAN_COMMUNICATION_NETWORK_COUNT; ++network) {
+        if (can_communication_api_process_rx(network) !=
+            CAN_COMMUNICATION_RC_OK) {
+            next_state = FSM_STATE_ERROR;
+        }
+    }
+
+    for (enum CanCommunicationNetwork network = 0; network < CAN_COMMUNICATION_NETWORK_COUNT; ++network) {
+        if (can_communications_api_process_tx(network) !=
+            CAN_COMMUNICATION_RC_OK) {
+            next_state = FSM_STATE_ERROR;
+        }
+    }
 
     switch (next_state) {
         case FSM_NO_CHANGE:
