@@ -336,7 +336,7 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcanHandle) {
 /* USER CODE BEGIN 1 */
 EAGLETRT_STATIC_INLINE enum CanCommunicationNetwork prv_can_get_network(
     const FDCAN_HandleTypeDef *hfdcan) {
-    if (hfdcan == NULL || hfdcan->Instance == NULL) {
+    if (hfdcan == NULL) {
         return CAN_COMMUNICATION_NETWORK_COUNT;
     }
 
