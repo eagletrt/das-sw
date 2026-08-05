@@ -51,7 +51,7 @@ jobs:
         run: pio run
 
       - name: Run Unit Tests
-          run: |
+        run: |
             pio test -e tests_front
             pio test -e tests_rear
 
