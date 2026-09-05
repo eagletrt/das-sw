@@ -32,6 +32,8 @@
 #include "fsm.h"
 #include "potentiometer.h"
 #include "feedback.h"
+#include "Core/Inc/fdcan.h"
+#include "can-communication-router-api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -110,7 +112,28 @@ int main(void) {
     MX_USART3_UART_Init();
     MX_TIM1_Init();
     /* USER CODE BEGIN 2 */
-    fsm_state_t current_state = fsm_run_state(FSM_STATE_INIT, NULL);
+    struct CanCommunicationNetworkConfig can_configs[CAN_COMMUNICATION_NETWORK_COUNT] = {
+        [CAN_COMMUNICATION_NETWORK_PRIMARY] = {
+            .send = fdcan_send_primary,
+            .on_receive = can_communication_router_api_receive_primary,
+            .cs_enter = __disable_irq,
+            .cs_exit = __enable_irq,
+        },
+        [CAN_COMMUNICATION_NETWORK_SECONDARY] = {
+            .send = fdcan_send_secondary,
+            .on_receive = can_communication_router_api_receive_secondary,
+            .cs_enter = __disable_irq,
+            .cs_exit = __enable_irq,
+        },
+        [CAN_COMMUNICATION_NETWORK_DAS] = {
+            .send = fdcan_send_private,
+            .on_receive = can_communication_router_api_receive_private,
+            .cs_enter = __disable_irq,
+            .cs_exit = __enable_irq,
+        },
+    };
+
+    fsm_state_t current_state = fsm_run_state(FSM_STATE_INIT, &can_configs);
 
     if (adc_start_dma_feedback() == FEEDBACK_RC_ERROR) {
         current_state = FSM_STATE_ERROR;

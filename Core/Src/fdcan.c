@@ -21,7 +21,8 @@
 #include "fdcan.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "eagletrt-api.h"
+#include "das/can-communication-api.h"
 /* USER CODE END 0 */
 
 FDCAN_HandleTypeDef hfdcan1;
@@ -171,6 +172,9 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef *fdcanHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF9_FDCAN1;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+        /* FDCAN1 interrupt Init */
+        HAL_NVIC_SetPriority(FDCAN1_IT0_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(FDCAN1_IT0_IRQn);
         /* USER CODE BEGIN FDCAN1_MspInit 1 */
 
         /* USER CODE END FDCAN1_MspInit 1 */
@@ -205,6 +209,9 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef *fdcanHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF9_FDCAN2;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+        /* FDCAN2 interrupt Init */
+        HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(FDCAN2_IT0_IRQn);
         /* USER CODE BEGIN FDCAN2_MspInit 1 */
 
         /* USER CODE END FDCAN2_MspInit 1 */
@@ -247,6 +254,9 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef *fdcanHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF11_FDCAN3;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+        /* FDCAN3 interrupt Init */
+        HAL_NVIC_SetPriority(FDCAN3_IT0_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(FDCAN3_IT0_IRQn);
         /* USER CODE BEGIN FDCAN3_MspInit 1 */
 
         /* USER CODE END FDCAN3_MspInit 1 */
@@ -271,6 +281,8 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcanHandle) {
     */
         HAL_GPIO_DeInit(GPIOA, GPIO_PIN_11 | GPIO_PIN_12);
 
+        /* FDCAN1 interrupt Deinit */
+        HAL_NVIC_DisableIRQ(FDCAN1_IT0_IRQn);
         /* USER CODE BEGIN FDCAN1_MspDeInit 1 */
 
         /* USER CODE END FDCAN1_MspDeInit 1 */
@@ -290,6 +302,8 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcanHandle) {
     */
         HAL_GPIO_DeInit(GPIOB, GPIO_PIN_12 | GPIO_PIN_6);
 
+        /* FDCAN2 interrupt Deinit */
+        HAL_NVIC_DisableIRQ(FDCAN2_IT0_IRQn);
         /* USER CODE BEGIN FDCAN2_MspDeInit 1 */
 
         /* USER CODE END FDCAN2_MspDeInit 1 */
@@ -311,6 +325,8 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcanHandle) {
 
         HAL_GPIO_DeInit(GPIOB, GPIO_PIN_3);
 
+        /* FDCAN3 interrupt Deinit */
+        HAL_NVIC_DisableIRQ(FDCAN3_IT0_IRQn);
         /* USER CODE BEGIN FDCAN3_MspDeInit 1 */
 
         /* USER CODE END FDCAN3_MspDeInit 1 */
@@ -318,5 +334,222 @@ void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcanHandle) {
 }
 
 /* USER CODE BEGIN 1 */
+EAGLETRT_STATIC_INLINE enum CanCommunicationNetwork prv_can_get_network(
+    const FDCAN_HandleTypeDef *hfdcan) {
+    if (hfdcan == NULL) {
+        return CAN_COMMUNICATION_NETWORK_COUNT;
+    }
 
+    if (hfdcan->Instance == FDCAN1) {
+        return CAN_COMMUNICATION_NETWORK_PRIMARY;
+    }
+
+    if (hfdcan->Instance == FDCAN2) {
+        return CAN_COMMUNICATION_NETWORK_SECONDARY;
+    }
+
+    if (hfdcan->Instance == FDCAN3) {
+        return CAN_COMMUNICATION_NETWORK_DAS;
+    }
+
+    return CAN_COMMUNICATION_NETWORK_COUNT;
+}
+
+EAGLETRT_STATIC_INLINE FDCAN_HandleTypeDef *prv_can_get_handler(
+    enum CanCommunicationNetwork network) {
+    switch (network) {
+        case CAN_COMMUNICATION_NETWORK_PRIMARY:
+            return &hfdcan1;
+
+        case CAN_COMMUNICATION_NETWORK_SECONDARY:
+            return &hfdcan2;
+
+        case CAN_COMMUNICATION_NETWORK_DAS:
+            return &hfdcan3;
+
+        default:
+            return NULL;
+    }
+}
+
+EAGLETRT_STATIC_INLINE uint32_t prv_can_length_to_fdcan_dlc(uint8_t length) {
+    switch (length) {
+        case 0U:
+            return FDCAN_DLC_BYTES_0;
+
+        case 1U:
+            return FDCAN_DLC_BYTES_1;
+
+        case 2U:
+            return FDCAN_DLC_BYTES_2;
+
+        case 3U:
+            return FDCAN_DLC_BYTES_3;
+
+        case 4U:
+            return FDCAN_DLC_BYTES_4;
+
+        case 5U:
+            return FDCAN_DLC_BYTES_5;
+
+        case 6U:
+            return FDCAN_DLC_BYTES_6;
+
+        case 7U:
+            return FDCAN_DLC_BYTES_7;
+
+        case 8U:
+            return FDCAN_DLC_BYTES_8;
+
+        default:
+            return 0xFFFFFFFFU;
+    }
+}
+
+EAGLETRT_STATIC_INLINE uint8_t prv_fdcan_dlc_to_can_length(uint32_t dlc) {
+    switch (dlc) {
+        case FDCAN_DLC_BYTES_0:
+            return 0U;
+
+        case FDCAN_DLC_BYTES_1:
+            return 1U;
+
+        case FDCAN_DLC_BYTES_2:
+            return 2U;
+
+        case FDCAN_DLC_BYTES_3:
+            return 3U;
+
+        case FDCAN_DLC_BYTES_4:
+            return 4U;
+
+        case FDCAN_DLC_BYTES_5:
+            return 5U;
+
+        case FDCAN_DLC_BYTES_6:
+            return 6U;
+
+        case FDCAN_DLC_BYTES_7:
+            return 7U;
+
+        case FDCAN_DLC_BYTES_8:
+            return 8U;
+
+        default:
+            return 0xFFU;
+    }
+}
+
+EAGLETRT_STATIC enum CanCommunicationReturnCode prv_can_send_to_hardware(
+    enum CanCommunicationNetwork network,
+    const struct CanCommunicationFrame *frame) {
+    if (frame == NULL) {
+        return CAN_COMMUNICATION_RC_NULL_POINTER;
+    }
+
+    if (frame->length > CAN_COMMUNICATION_FRAME_DATA_SIZE) {
+        return CAN_COMMUNICATION_RC_INVALID_LENGTH;
+    }
+
+    FDCAN_HandleTypeDef *hfdcan = prv_can_get_handler(network);
+    if (hfdcan == NULL) {
+        return CAN_COMMUNICATION_RC_NULL_POINTER;
+    }
+
+    uint32_t dlc = prv_can_length_to_fdcan_dlc(frame->length);
+    if (dlc == 0xFFFFFFFFU) {
+        return CAN_COMMUNICATION_RC_INVALID_LENGTH;
+    }
+
+    FDCAN_TxHeaderTypeDef header = {
+        .Identifier = frame->id,
+        .IdType = FDCAN_STANDARD_ID,
+        .TxFrameType = FDCAN_DATA_FRAME,
+        .DataLength = dlc,
+        .ErrorStateIndicator = FDCAN_ESI_ACTIVE,
+        .BitRateSwitch = FDCAN_BRS_OFF,
+        .FDFormat = FDCAN_CLASSIC_CAN,
+        .TxEventFifoControl = FDCAN_NO_TX_EVENTS,
+        .MessageMarker = 0U,
+    };
+
+    if (HAL_FDCAN_AddMessageToTxFifoQ(hfdcan,
+                                      &header,
+                                      (uint8_t *)frame->data) != HAL_OK) {
+        return CAN_COMMUNICATION_RC_TRANSMISSION_ERROR;
+    }
+
+    return CAN_COMMUNICATION_RC_OK;
+}
+
+enum CanCommunicationReturnCode fdcan_send_primary(
+    const struct CanCommunicationFrame *frame) {
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_PRIMARY, frame);
+}
+
+enum CanCommunicationReturnCode fdcan_send_secondary(
+    const struct CanCommunicationFrame *frame) {
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_SECONDARY, frame);
+}
+
+enum CanCommunicationReturnCode fdcan_send_private(
+    const struct CanCommunicationFrame *frame) {
+    return prv_can_send_to_hardware(CAN_COMMUNICATION_NETWORK_DAS, frame);
+}
+
+EAGLETRT_STATIC void prv_can_receive_from_hardware(
+    FDCAN_HandleTypeDef *hfdcan,
+    uint32_t rx_fifo) {
+    FDCAN_RxHeaderTypeDef header = { 0 };
+    struct CanCommunicationFrame frame = { 0 };
+
+    if (HAL_FDCAN_GetRxMessage(hfdcan,
+                               rx_fifo,
+                               &header,
+                               frame.data) != HAL_OK) {
+        return;
+    }
+
+    frame.id = header.Identifier;
+    frame.length = prv_fdcan_dlc_to_can_length(header.DataLength);
+
+    if (frame.length > CAN_COMMUNICATION_FRAME_DATA_SIZE) {
+        return;
+    }
+
+    enum CanCommunicationNetwork network = prv_can_get_network(hfdcan);
+    if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
+        return;
+    }
+
+    EAGLETRT_API_UNUSED(can_communication_api_add_to_rx(network, &frame));
+}
+
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
+                               uint32_t rx_fifo0_its) {
+    if ((rx_fifo0_its & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) == 0U) {
+        return;
+    }
+
+    prv_can_receive_from_hardware(hfdcan, FDCAN_RX_FIFO0);
+
+    EAGLETRT_API_UNUSED(HAL_FDCAN_ActivateNotification(
+        hfdcan,
+        FDCAN_IT_RX_FIFO0_NEW_MESSAGE,
+        0U));
+}
+
+void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan,
+                               uint32_t rx_fifo1_its) {
+    if ((rx_fifo1_its & FDCAN_IT_RX_FIFO1_NEW_MESSAGE) == 0U) {
+        return;
+    }
+
+    prv_can_receive_from_hardware(hfdcan, FDCAN_RX_FIFO1);
+
+    EAGLETRT_API_UNUSED(HAL_FDCAN_ActivateNotification(
+        hfdcan,
+        FDCAN_IT_RX_FIFO1_NEW_MESSAGE,
+        0U));
+}
 /* USER CODE END 1 */
