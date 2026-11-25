@@ -1,3 +1,6 @@
+#ifndef CAN_COMMUNICATION_API_H
+#define CAN_COMMUNICATION_API_H
+
 #include "can-communication.h"
 
 /*!
@@ -72,3 +75,5 @@ enum CanCommunicationReturnCode can_communications_api_process_tx(enum CanCommun
  * \retval CAN_COMMUNICATION_RC_ERROR If a PAL internal pipeline fault is encountered.
  */
 enum CanCommunicationReturnCode can_communication_api_process_rx(enum CanCommunicationNetwork network);
+
+#endif // CAN_COMMUNICATION_API_H

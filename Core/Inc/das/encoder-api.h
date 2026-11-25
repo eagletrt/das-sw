@@ -1,3 +1,6 @@
+#ifndef ENCODER_API_H
+#define ENCODER_API_H
+
 #include "encoder.h"
 
 #include "eagletrt.h"
@@ -35,3 +38,5 @@ float encoder_api_get_angle(enum EncoderName encoder);
 enum EncoderReturnCode encoder_api_set_angle(enum EncoderName encoder, float angle);
 
 #endif // DAS_FRONT
+
+#endif // ENCODER_API_H

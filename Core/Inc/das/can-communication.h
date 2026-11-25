@@ -1,3 +1,6 @@
+#ifndef CAN_COMMUNICATION_H
+#define CAN_COMMUNICATION_H
+
 #include "pal.h"
 #include "arena-allocator.h"
 #include <stdint.h>
@@ -109,3 +112,5 @@ struct CanCommunicationHandler {
     struct ArenaAllocatorHandler arena;                                            /*!< Internal memory arena shared across network handlers */
     struct CanCommunicationNetworkState networks[CAN_COMMUNICATION_NETWORK_COUNT]; /*!< State structures managing individual physical networks */
 };
+
+#endif // CAN_COMMUNICATION_H

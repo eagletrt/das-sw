@@ -1,3 +1,6 @@
+#ifndef CAN_COMMUNICATION_ROUTER_API_H
+#define CAN_COMMUNICATION_ROUTER_API_H
+
 #include "can-communication.h"
 
 /*!
@@ -23,3 +26,5 @@ enum CanCommunicationReturnCode can_communication_router_api_receive_secondary(c
  * \retval CAN_COMMUNICATION_RC_RECEIVE_HANDLER_ERROR if dispatch fails.
  */
 enum CanCommunicationReturnCode can_communication_router_api_receive_private(const struct CanCommunicationFrame *frame);
+
+#endif // CAN_COMMUNICATION_ROUTER_API_H

@@ -1,3 +1,6 @@
+#ifndef FEEDBACK_API_H
+#define FEEDBACK_API_H
+
 #include "feedback.h"
 
 #include "eagletrt.h"
@@ -31,3 +34,5 @@ enum FeedbackState feedback_api_get_state(enum FeedbackName feedback);
  * \retval FEEDBACK_RC_ERROR if \p feedback or \p state are out of bounds
  */
 enum FeedbackReturnCode feedback_api_set_state(enum FeedbackName feedback, enum FeedbackState state);
+
+#endif // FEEDBACK_API_H
