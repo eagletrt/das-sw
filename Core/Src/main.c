@@ -32,7 +32,6 @@
 #include "fsm.h"
 #include "potentiometer.h"
 #include "feedback.h"
-#include "Core/Inc/fdcan.h"
 #include "can-communication-router-api.h"
 /* USER CODE END Includes */
 

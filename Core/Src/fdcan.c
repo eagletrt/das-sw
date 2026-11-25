@@ -22,7 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "eagletrt-api.h"
-#include "das/can-communication-api.h"
+#include "can-communication-api.h"
 /* USER CODE END 0 */
 
 FDCAN_HandleTypeDef hfdcan1;
