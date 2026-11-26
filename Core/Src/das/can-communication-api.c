@@ -163,7 +163,7 @@ enum CanCommunicationReturnCode can_communication_api_add_to_rx(enum CanCommunic
     return prv_enqueue(network, frame, false);
 }
 
-enum CanCommunicationReturnCode can_communications_api_process_tx(enum CanCommunicationNetwork network) {
+enum CanCommunicationReturnCode can_communication_api_process_tx(enum CanCommunicationNetwork network) {
     if (network >= CAN_COMMUNICATION_NETWORK_COUNT) {
         return CAN_COMMUNICATION_RC_INVALID_NETWORK;
     }
