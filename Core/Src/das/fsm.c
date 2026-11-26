@@ -34,10 +34,14 @@ fsm_state_func_t *const fsm_state_table[FSM_NUM_STATES] = {
 // Table of transition functions
 transition_func_t *const fsm_transition_table[FSM_NUM_STATES][FSM_NUM_STATES] = {
     /* states:     init,  idle,          error,          flash      */
-    /* init    */ { NULL, fsm_init_done, fsm_init_error, NULL },
-    /* idle    */ { NULL, NULL, fsm_error_detected, fsm_start_flash },
-    /* error   */ { NULL, NULL, NULL, NULL },
-    /* flash   */ { NULL, fsm_flash_done, fsm_error_detected, NULL },
+    /* init    */
+    { NULL, fsm_init_done,  fsm_init_error,     NULL            },
+    /* idle    */
+    { NULL, NULL,           fsm_error_detected, fsm_start_flash },
+    /* error   */
+    { NULL, NULL,           NULL,               NULL            },
+    /* flash   */
+    { NULL, fsm_flash_done, fsm_error_detected, NULL            },
 };
 
 // Triggered event
