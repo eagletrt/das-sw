@@ -344,20 +344,20 @@ void test_add_to_rx_invalid_length(void) {
 /*! \} */
 
 /*!
- * \defgroup can_communications_api_process_tx
- * Tests for can_communications_api_process_tx
+ * \defgroup can_communication_api_process_tx
+ * Tests for can_communication_api_process_tx
  * \{
  */
 
 void test_process_tx_invalid_network(void) {
     TEST_ASSERT_EQUAL(
         CAN_COMMUNICATION_RC_INVALID_NETWORK,
-        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_COUNT));
+        can_communication_api_process_tx(CAN_COMMUNICATION_NETWORK_COUNT));
 }
 
 void test_process_tx_empty_queue_succeeds_without_calling_send(void) {
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
+        can_communication_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -379,7 +379,7 @@ void test_process_tx_drains_a_single_frame(void) {
         &frame);
 
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
+        can_communication_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -408,7 +408,7 @@ void test_process_tx_drains_every_queued_frame_in_one_call(void) {
     }
 
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
+        can_communication_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_OK,
@@ -439,7 +439,7 @@ void test_process_tx_preserves_frame_contents_and_order(void) {
         CAN_COMMUNICATION_NETWORK_PRIMARY,
         &second);
 
-    can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
+    can_communication_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         2U,
@@ -499,7 +499,7 @@ void test_process_tx_surfaces_send_failure_but_keeps_draining(void) {
         CAN_COMMUNICATION_RC_TRANSMISSION_ERROR;
 
     enum CanCommunicationReturnCode rc =
-        can_communications_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
+        can_communication_api_process_tx(CAN_COMMUNICATION_NETWORK_PRIMARY);
 
     TEST_ASSERT_EQUAL_MESSAGE(
         CAN_COMMUNICATION_RC_TRANSMISSION_ERROR,

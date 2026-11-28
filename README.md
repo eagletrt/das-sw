@@ -95,7 +95,7 @@ Ogni rete possiede una coda RX e una coda TX da 128 frame Classic CAN, con paylo
 Il flusso previsto è:
 
 - **Ricezione:** la callback FDCAN traduce il frame HAL in `CanCommunicationFrame` e lo accoda; `can_communication_api_process_rx()` svuota la coda e invoca il router associato alla rete.
-- **Trasmissione:** l'applicazione chiama `can_communication_api_add_to_tx()`; `can_communications_api_process_tx()` svuota la coda usando la callback hardware registrata durante l'inizializzazione.
+- **Trasmissione:** l'applicazione chiama `can_communication_api_add_to_tx()`; `can_communication_api_process_tx()` svuota la coda usando la callback hardware registrata durante l'inizializzazione.
 
 I callback `cs_enter` e `cs_exit` permettono di proteggere le code condivise tra ISR e main loop. In `main.c` sono predisposti usando disabilitazione e riabilitazione degli interrupt.
 
@@ -134,7 +134,7 @@ Dopo l'inizializzazione delle periferiche, `main.c`:
 La struttura software è più avanti del wiring nel main loop. Prima di aggiungere nuova logica è importante sapere che:
 
 - la configurazione CAN costruita in `main.c` viene passata alla FSM, ma `fsm_do_init()` non la usa ancora e non chiama `can_communication_api_init()`;
-- il main loop non richiama ancora `can_communication_api_process_rx()` o `can_communications_api_process_tx()`;
+- il main loop non richiama ancora `can_communication_api_process_rx()` o `can_communication_api_process_tx()`;
 - il router CAN non deserializza ancora i frame;
 - acquisitori ed encoder dispongono delle rispettive API, ma la loro inizializzazione non è ancora inserita nella FSM;
 - il trigger periodico dell'encoder è implementato, ma il timer non viene ancora avviato dal flusso applicativo;

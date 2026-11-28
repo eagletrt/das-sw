@@ -23,3 +23,6 @@ SpacesBeforeTrailingComments: 1
 SpaceAfterCStyleCast: false
 ReflowComments: false
 SortIncludes: false
+
+# additional options
+AlignArrayOfStructures: Left

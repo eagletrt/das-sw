@@ -1,3 +1,6 @@
+#ifndef ACQUISINATOR_API_H
+#define ACQUISINATOR_API_H
+
 #include "acquisinator.h"
 
 #include "eagletrt.h"
@@ -32,3 +35,5 @@ struct AcquisinatorStrainGauge acquisinator_api_get_strain_gauge(enum Acquisinat
  * \retval ACQUISINATOR_RC_ERROR if \p acquisinator are out of bounds
  */
 enum AcquisinatorReturnCode acquisinator_api_set_strain_gauge(enum AcquisinatorName acquisinator, struct AcquisinatorStrainGauge strain_gauge);
+
+#endif // ACQUISINATOR_API_H

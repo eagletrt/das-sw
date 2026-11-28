@@ -1,3 +1,6 @@
+#ifndef POTENTIOMETER_API_H
+#define POTENTIOMETER_API_H
+
 #include "potentiometer.h"
 
 #include "eagletrt.h"
@@ -31,3 +34,5 @@ int16_t potentiometer_api_get_value(enum PotentiometerName potentiometer);
  * \retval POTENTIOMETER_RC_ERROR if \p potentiometer or \p value are out of bounds
  */
 enum PotentiometerReturnCode potentiometer_api_set_value(enum PotentiometerName potentiometer, uint16_t value);
+
+#endif // POTENTIOMETER_API_H
